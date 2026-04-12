@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CEK REKENING MP1 Mini App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0f0f0f; color: white; margin:0; padding:15px; }
+    .header { text-align:center; font-size:22px; font-weight:bold; margin:15px 0; }
+    button { width:100%; padding:15px; margin:8px 0; font-size:16px; border:none; border-radius:12px; background:#1f1f1f; color:white; }
+    button.active { background:#00ff00; color:black; }
+    input { width:100%; padding:15px; font-size:18px; border-radius:12px; border:none; margin:10px 0; }
+    .result { margin-top:20px; padding:15px; background:#1f1f1f; border-radius:12px; display:none; }
+    .loading { text-align:center; font-size:18px; }
+  </style>
+</head>
+<body>
+  <div class="header">🌟 CEK REKENING MP1 🌟</div>
+
+  <button onclick="pilihTipe('bank')">🏦 Cek Bank</button>
+  <button onclick="pilihTipe('wallet')">📱 Cek E-Wallet</button>
+
+  <div id="selection" style="display:none;">
+    <h3 id="tipeTitle"></h3>
+    <!-- Bank buttons akan di-generate via JS -->
+    <div id="list"></div>
+  </div>
+
+  <div id="inputSection" style="display:none;">
+    <input type="text" id="nomor" placeholder="Masukkan nomor rekening / HP" maxlength="20">
+    <button onclick="cekRekening()" style="background:#00ff00;color:black;font-weight:bold;">✅ CEK SEKARANG</button>
+  </div>
+
+  <div id="result" class="result"></div>
+
+  <script>
+    const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a"; // sama seperti di bot kamu
+    let isBank = true;
+    let kodeTerpilih = "";
+
+    const BANKS = {
+      'BCA': 'bank_bca', 'BNI': 'bank_bni', 'BRI': 'bank_bri', 'MANDIRI': 'bank_mandiri',
+      'BSI': 'bank_bsm', 'PERMATA': 'bank_permata', 'CIMB': 'bank_cimb', 'BTN': 'bank_btn',
+      'DANAMON': 'bank_danamon', 'JAGO': 'bank_artos', 'SEABANK': 'bank_kesejahteraan_ekonomi',
+      'BLU': 'bank_royal', 'JENIUS': 'bank_tabungan_pensiunan_nasional', 'MEGA': 'bank_mega',
+      'MAYBANK': 'bank_bii', 'PANIN': 'bank_panin', 'SINARMAS': 'bank_sinarmas'
+    };
+
+    const WALLETS = {
+      'DANA': 'wallet_dana', 'OVO': 'wallet_ovo', 'GOPAY': 'gopay_user',
+      'SHOPEEPAY': 'wallet_shopeepay', 'LINK AJA': 'wallet_linkaja',
+      'I.SAKU': 'wallet_isaku', 'AstraPay': 'wallet_astrapay', 'QRIS': 'qris'
+    };
+
+    function pilihTipe(tipe) {
+      isBank = (tipe === 'bank');
+      document.getElementById('selection').style.display = 'block';
+      document.getElementById('tipeTitle').innerHTML = isBank ? 
+        '🏦 Pilih Bank' : '📱 Pilih E-Wallet';
+
+      const list = document.getElementById('list');
+      list.innerHTML = '';
+
+      const data = isBank ? BANKS : WALLETS;
+      Object.keys(data).forEach(key => {
+        const btn = document.createElement('button');
+        btn.textContent = key;
+        btn.onclick = () => {
+          kodeTerpilih = data[key];
+          document.getElementById('inputSection').style.display = 'block';
+          document.getElementById('selection').style.display = 'none';
+        };
+        list.appendChild(btn);
+      });
+    }
+
+    async function cekRekening() {
+      const nomor = document.getElementById('nomor').value.trim();
+      if (!nomor) return alert("Masukkan nomor dulu bro!");
+
+      const resultDiv = document.getElementById('result');
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `<div class="loading">⏳ Sedang mengecek...</div>`;
+
+      const url = isBank ? 
+        "https://rfpdev.xyz/api/check-rekening" : 
+        "https://rfpdev.xyz/api/check-ewallet";
+
+      const payload = {
+        api_key: API_KEY,
+        [isBank ? 'bank_code' : 'ewallet_code']: kodeTerpilih,
+        [isBank ? 'account_number' : 'phone_number']: nomor.replace(/[^0-9]/g,'')
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(payload)
+        });
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          const nama = data.data?.customer_name || 'Tidak terdeteksi';
+          resultDiv.innerHTML = `
+            ✅ <b>BERHASIL</b><br><br>
+            Jenis: <b>${Object.keys(isBank ? BANKS : WALLETS).find(k => (isBank ? BANKS : WALLETS)[k] === kodeTerpilih)}</b><br>
+            Nomor: <code>${nomor}</code><br>
+            Nama Pemilik: <b>${nama}</b>
+          `;
+        } else {
+          resultDiv.innerHTML = `❌ Gagal: ${data.message || 'Data tidak ditemukan'}`;
+        }
+      } catch (e) {
+        resultDiv.innerHTML = "⚠️ Error koneksi. Coba lagi.";
+      }
+    }
+
+    // Init Telegram WebApp
+    window.Telegram.WebApp.ready();
+    window.Telegram.WebApp.expand();
+  </script>
+</body>
+</html>
