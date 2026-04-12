@@ -3,43 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CEK REKENING MP1 Mini App</title>
+  <title>CEK REKENING MP1</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #0f0f0f; color: white; margin:0; padding:15px; }
-    .header { text-align:center; font-size:22px; font-weight:bold; margin:15px 0; }
-    button { width:100%; padding:15px; margin:8px 0; font-size:16px; border:none; border-radius:12px; background:#1f1f1f; color:white; }
-    button.active { background:#00ff00; color:black; }
-    input { width:100%; padding:15px; font-size:18px; border-radius:12px; border:none; margin:10px 0; }
-    .result { margin-top:20px; padding:15px; background:#1f1f1f; border-radius:12px; display:none; }
-    .loading { text-align:center; font-size:18px; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-hover:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 25px -5px rgb(0 255 0 / 0.2); }
+    .neon-text { text-shadow: 0 0 15px rgb(0 255 0); }
   </style>
 </head>
-<body>
-  <div class="header">🌟 CEK REKENING MP1 🌟</div>
+<body class="bg-[#0a0a0a] text-white min-h-screen">
 
-  <button onclick="pilihTipe('bank')">🏦 Cek Bank</button>
-  <button onclick="pilihTipe('wallet')">📱 Cek E-Wallet</button>
+  <div class="max-w-xl mx-auto p-5 pb-24">
+    <!-- HEADER -->
+    <div class="flex items-center justify-center gap-3 mt-8 mb-10">
+      <span class="text-4xl">🌟</span>
+      <h1 class="text-4xl font-bold tracking-tighter neon-text">CEK REKENING MP1</h1>
+      <span class="text-4xl">🌟</span>
+    </div>
+    <p class="text-center text-gray-400 mb-8 text-lg">Cek nama pemilik rekening & e-wallet<br>akurat • instan • terpercaya</p>
 
-  <div id="selection" style="display:none;">
-    <h3 id="tipeTitle"></h3>
-    <!-- Bank buttons akan di-generate via JS -->
-    <div id="list"></div>
+    <!-- MENU AWAL -->
+    <div id="mainMenu" class="space-y-4">
+      <button onclick="pilihTipe('bank')" 
+              class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#111] hover:from-[#00ff00] hover:to-[#00cc00] hover:text-black p-6 rounded-3xl flex items-center gap-5 text-left transition-all duration-300">
+        <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center text-4xl">🏦</div>
+        <div>
+          <div class="text-2xl font-semibold">Cek Bank</div>
+          <div class="text-green-400 text-sm">BCA • BRI • Mandiri • dan 15 bank lainnya</div>
+        </div>
+      </button>
+
+      <button onclick="pilihTipe('wallet')" 
+              class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#111] hover:from-[#00ff00] hover:to-[#00cc00] hover:text-black p-6 rounded-3xl flex items-center gap-5 text-left transition-all duration-300">
+        <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center text-4xl">📱</div>
+        <div>
+          <div class="text-2xl font-semibold">Cek E-Wallet</div>
+          <div class="text-green-400 text-sm">DANA • OVO • GoPay • ShopeePay • dll</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- SELECTION SCREEN -->
+    <div id="selectionScreen" class="hidden">
+      <div class="flex items-center justify-between mb-6">
+        <button onclick="backToMain()" class="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
+          ← Kembali
+        </button>
+        <h2 id="selectionTitle" class="text-2xl font-bold"></h2>
+      </div>
+      <div id="gridContainer" class="grid gap-3"></div>
+    </div>
+
+    <!-- INPUT SCREEN -->
+    <div id="inputScreen" class="hidden">
+      <div class="flex items-center justify-between mb-6">
+        <button onclick="backToSelection()" class="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
+          ← Kembali
+        </button>
+        <div id="selectedName" class="font-semibold text-xl"></div>
+      </div>
+
+      <div class="bg-[#111] rounded-3xl p-6">
+        <input id="nomorInput" type="tel" maxlength="20"
+               class="w-full bg-transparent text-2xl placeholder:text-gray-500 focus:outline-none text-center py-4"
+               placeholder="Masukkan nomor rekening / HP">
+      </div>
+
+      <button onclick="cekRekening()" 
+              class="mt-8 w-full bg-green-500 hover:bg-green-400 active:scale-95 transition-all text-black font-bold text-xl py-5 rounded-3xl flex items-center justify-center gap-2 shadow-lg shadow-green-500/50">
+        <span>✅ CEK SEKARANG</span>
+      </button>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultScreen" class="hidden">
+      <div id="resultCard" class="bg-[#111] rounded-3xl p-8 text-center mt-4"></div>
+      
+      <div class="flex gap-4 mt-6">
+        <button onclick="cekLagi()" 
+                class="flex-1 bg-[#222] hover:bg-[#333] py-5 rounded-3xl font-semibold">🔄 Cek Lagi</button>
+        <button onclick="backToMain()" 
+                class="flex-1 bg-green-500 hover:bg-green-400 text-black py-5 rounded-3xl font-semibold">🏠 Menu Utama</button>
+      </div>
+    </div>
   </div>
-
-  <div id="inputSection" style="display:none;">
-    <input type="text" id="nomor" placeholder="Masukkan nomor rekening / HP" maxlength="20">
-    <button onclick="cekRekening()" style="background:#00ff00;color:black;font-weight:bold;">✅ CEK SEKARANG</button>
-  </div>
-
-  <div id="result" class="result"></div>
 
   <script>
-    const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a"; // sama seperti di bot kamu
+    const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
     let isBank = true;
     let kodeTerpilih = "";
+    let namaTerpilih = "";
 
-    const BANKS = {
+    const BANKS = { /* sama seperti sebelumnya */ 
       'BCA': 'bank_bca', 'BNI': 'bank_bni', 'BRI': 'bank_bri', 'MANDIRI': 'bank_mandiri',
       'BSI': 'bank_bsm', 'PERMATA': 'bank_permata', 'CIMB': 'bank_cimb', 'BTN': 'bank_btn',
       'DANAMON': 'bank_danamon', 'JAGO': 'bank_artos', 'SEABANK': 'bank_kesejahteraan_ekonomi',
@@ -53,44 +111,92 @@
       'I.SAKU': 'wallet_isaku', 'AstraPay': 'wallet_astrapay', 'QRIS': 'qris'
     };
 
-    function pilihTipe(tipe) {
-      isBank = (tipe === 'bank');
-      document.getElementById('selection').style.display = 'block';
-      document.getElementById('tipeTitle').innerHTML = isBank ? 
-        '🏦 Pilih Bank' : '📱 Pilih E-Wallet';
+    function initTelegram() {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+      window.Telegram.WebApp.setHeaderColor("#0a0a0a");
+    }
 
-      const list = document.getElementById('list');
-      list.innerHTML = '';
+    function tailwindConfig() {
+      tailwind.config = {
+        content: [],
+        theme: { extend: {} }
+      };
+    }
+
+    function pilihTipe(tipe) {
+      isBank = tipe === 'bank';
+      document.getElementById('mainMenu').classList.add('hidden');
+      document.getElementById('selectionScreen').classList.remove('hidden');
+      
+      document.getElementById('selectionTitle').innerHTML = isBank 
+        ? '🏦 Pilih Bank' 
+        : '📱 Pilih E-Wallet';
+
+      const container = document.getElementById('gridContainer');
+      container.innerHTML = '';
+      container.className = isBank ? 'grid grid-cols-3 gap-3' : 'grid grid-cols-2 gap-3';
 
       const data = isBank ? BANKS : WALLETS;
+
       Object.keys(data).forEach(key => {
-        const btn = document.createElement('button');
-        btn.textContent = key;
-        btn.onclick = () => {
+        const card = document.createElement('div');
+        card.className = `bg-[#111] rounded-2xl p-4 text-center card-hover cursor-pointer`;
+        card.innerHTML = `
+          <div class="text-5xl mb-3">${isBank ? '🏦' : '📱'}</div>
+          <div class="font-semibold">${key}</div>
+        `;
+        card.onclick = () => {
           kodeTerpilih = data[key];
-          document.getElementById('inputSection').style.display = 'block';
-          document.getElementById('selection').style.display = 'none';
+          namaTerpilih = key;
+          showInputScreen();
         };
-        list.appendChild(btn);
+        container.appendChild(card);
       });
     }
 
+    function showInputScreen() {
+      document.getElementById('selectionScreen').classList.add('hidden');
+      document.getElementById('inputScreen').classList.remove('hidden');
+      document.getElementById('selectedName').textContent = namaTerpilih;
+      document.getElementById('nomorInput').focus();
+    }
+
+    function backToMain() {
+      document.getElementById('mainMenu').classList.remove('hidden');
+      document.getElementById('selectionScreen').classList.add('hidden');
+      document.getElementById('inputScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+    }
+
+    function backToSelection() {
+      document.getElementById('inputScreen').classList.add('hidden');
+      document.getElementById('selectionScreen').classList.remove('hidden');
+    }
+
     async function cekRekening() {
-      const nomor = document.getElementById('nomor').value.trim();
-      if (!nomor) return alert("Masukkan nomor dulu bro!");
+      const nomor = document.getElementById('nomorInput').value.trim();
+      if (!nomor) {
+        alert("Masukkan nomor dulu bro 🔥");
+        return;
+      }
 
-      const resultDiv = document.getElementById('result');
-      resultDiv.style.display = 'block';
-      resultDiv.innerHTML = `<div class="loading">⏳ Sedang mengecek...</div>`;
+      document.getElementById('inputScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
 
-      const url = isBank ? 
-        "https://rfpdev.xyz/api/check-rekening" : 
-        "https://rfpdev.xyz/api/check-ewallet";
+      const card = document.getElementById('resultCard');
+      card.innerHTML = `
+        <div class="flex justify-center items-center py-12">
+          <div class="animate-spin rounded-full h-16 w-16 border-4 border-green-500 border-t-transparent"></div>
+        </div>
+        <p class="text-center text-gray-400 mt-4">Sedang mengecek...</p>
+      `;
 
+      const url = isBank ? "https://rfpdev.xyz/api/check-rekening" : "https://rfpdev.xyz/api/check-ewallet";
       const payload = {
         api_key: API_KEY,
         [isBank ? 'bank_code' : 'ewallet_code']: kodeTerpilih,
-        [isBank ? 'account_number' : 'phone_number']: nomor.replace(/[^0-9]/g,'')
+        [isBank ? 'account_number' : 'phone_number']: nomor.replace(/[^0-9]/g, '')
       };
 
       try {
@@ -102,24 +208,52 @@
         const data = await res.json();
 
         if (data.status === 'success') {
-          const nama = data.data?.customer_name || 'Tidak terdeteksi';
-          resultDiv.innerHTML = `
-            ✅ <b>BERHASIL</b><br><br>
-            Jenis: <b>${Object.keys(isBank ? BANKS : WALLETS).find(k => (isBank ? BANKS : WALLETS)[k] === kodeTerpilih)}</b><br>
-            Nomor: <code>${nomor}</code><br>
-            Nama Pemilik: <b>${nama}</b>
+          const namaPemilik = data.data?.customer_name || 'Tidak terdeteksi';
+          card.innerHTML = `
+            <div class="text-7xl mb-6">✅</div>
+            <h3 class="text-green-400 text-2xl font-bold mb-4">VERIFIKASI BERHASIL</h3>
+            <div class="space-y-6 text-left">
+              <div><span class="text-gray-400">Jenis Akun</span><br><span class="font-semibold text-xl">${namaTerpilih}</span></div>
+              <div><span class="text-gray-400">Nomor</span><br><span class="font-mono text-xl">${nomor}</span></div>
+              <div><span class="text-gray-400">Nama Pemilik</span><br>
+                <span class="font-semibold text-2xl text-green-300">${namaPemilik}</span>
+              </div>
+            </div>
+            <button onclick="copyNama('${namaPemilik}')" 
+                    class="mt-8 w-full bg-[#222] py-4 rounded-2xl text-sm font-medium">📋 Salin Nama Pemilik</button>
           `;
         } else {
-          resultDiv.innerHTML = `❌ Gagal: ${data.message || 'Data tidak ditemukan'}`;
+          card.innerHTML = `
+            <div class="text-7xl mb-6">❌</div>
+            <p class="text-red-400 text-xl font-semibold">${data.message || 'Data tidak ditemukan'}</p>
+          `;
         }
       } catch (e) {
-        resultDiv.innerHTML = "⚠️ Error koneksi. Coba lagi.";
+        card.innerHTML = `
+          <div class="text-7xl mb-6">⚠️</div>
+          <p class="text-gray-400">Koneksi bermasalah, coba lagi nanti</p>
+        `;
       }
     }
 
-    // Init Telegram WebApp
-    window.Telegram.WebApp.ready();
-    window.Telegram.WebApp.expand();
+    function copyNama(nama) {
+      navigator.clipboard.writeText(nama).then(() => {
+        const btn = event.target;
+        const original = btn.textContent;
+        btn.textContent = "✅ Berhasil disalin!";
+        setTimeout(() => btn.textContent = original, 2000);
+      });
+    }
+
+    function cekLagi() {
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('inputScreen').classList.remove('hidden');
+      document.getElementById('nomorInput').value = '';
+    }
+
+    // INIT
+    initTelegram();
+    tailwindConfig();
   </script>
 </body>
 </html>
