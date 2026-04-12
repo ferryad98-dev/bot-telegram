@@ -1,200 +1,310 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>CEK REKENING MP1</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap');
-    body { font-family: 'Inter', system-ui, sans-serif; }
-    .neon { text-shadow: 0 0 25px rgb(0 255 100); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0f14;
+      --surface: #141720;
+      --surface2: #1c2030;
+      --border: #252a3a;
+      --accent: #4f8fff;
+      --accent2: #38f5b0;
+      --danger: #ff5c5c;
+      --text: #e8ecf4;
+      --muted: #6b7592;
+      --mono: 'DM Mono', monospace;
+      --sans: 'Sora', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(79,143,255,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(79,143,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    .wrapper { width: 100%; max-width: 420px; z-index: 1; }
+    .header { text-align: center; margin-bottom: 1.8rem; }
+    .header .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(79,143,255,0.1); border: 1px solid rgba(79,143,255,0.25);
+      border-radius: 100px; padding: 4px 14px; font-size: 0.72rem; font-weight: 600;
+      color: var(--accent); text-transform: uppercase;
+    }
+    .header h1 { font-size: 1.85rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+    .header h1 span { color: var(--accent); }
+    .header p { color: var(--muted); font-size: 0.88rem; margin-top: 0.4rem; }
+    .tabs {
+      display: grid; grid-template-columns: 1fr 1fr; background: var(--surface2);
+      border-radius: 12px; padding: 4px; margin-bottom: 1.5rem; border: 1px solid var(--border);
+    }
+    .tab-btn {
+      padding: 12px; border: none; background: transparent; color: var(--muted);
+      font-family: var(--sans); font-size: 0.9rem; font-weight: 600; border-radius: 9px;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .tab-btn.active {
+      background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(79,143,255,0.35);
+    }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 1.8rem;
+    }
+    .field { margin-bottom: 1.4rem; }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
+    select, input {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 13px 14px; color: var(--text);
+      font-family: var(--mono); font-size: 1rem; outline: none;
+    }
+    .btn {
+      width: 100%; padding: 15px; background: var(--accent); color: #fff;
+      border: none; border-radius: 12px; font-family: var(--sans); font-size: 1rem;
+      font-weight: 600; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+    }
+    .spinner {
+      width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .result { margin-top: 1.5rem; border-radius: 14px; display: none; }
+    .result.show { display: block; }
+    .result-header { padding: 12px 18px; font-size: 0.75rem; font-weight: 600; border-radius: 14px 14px 0 0; }
+    .result.success .result-header { background: rgba(56,245,176,0.12); color: var(--accent2); }
+    .result.error .result-header { background: rgba(255,92,92,0.12); color: var(--danger); }
+    .result-body {
+      padding: 1.4rem 1.6rem; background: var(--surface2); border: 1px solid var(--border);
+      border-top: none; border-radius: 0 0 14px 14px;
+    }
+    .result-name { font-size: 1.45rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .copy-btn {
+      margin-top: 12px; width: 100%; padding: 12px; background: #222; color: #fff;
+      border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
+    }
+    .footer-note { text-align: center; margin-top: 1.8rem; font-size: 0.75rem; color: var(--muted); }
   </style>
 </head>
-<body class="bg-[#0a0a0a] text-white min-h-screen">
-
-  <div class="max-w-[380px] mx-auto p-4">
-
-    <!-- HEADER SUPER COMPACT -->
-    <div class="flex items-center justify-center gap-3 mt-4 mb-5">
-      <span class="text-3xl">⭐</span>
-      <h1 class="text-3xl font-bold tracking-[-2px] neon text-center">CEK REKENING MP1</h1>
-      <span class="text-3xl">⭐</span>
-    </div>
-    <p class="text-center text-gray-400 text-sm leading-tight mb-7">
-      Cek nama pemilik rekening &amp; e-wallet<br>
-      akurat • instan • terpercaya<br>
-      kalau kebesaran, coba ctrl sama scroll buat zoom out ya
-    </p>
-
-    <!-- MENU UTAMA -->
-    <div id="mainMenu" class="space-y-3">
-      <button onclick="pilihTipe('bank')" 
-              class="w-full bg-[#111] hover:bg-[#1a1a1a] active:scale-95 p-4 rounded-3xl flex items-center gap-4 transition-all">
-        <div class="w-11 h-11 bg-green-500/10 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">🏦</div>
-        <div>
-          <div class="text-lg font-semibold">Cek Bank</div>
-          <div class="text-green-400 text-xs">BCA • BRI • Mandiri • dan 15 lainnya</div>
-        </div>
-      </button>
-
-      <button onclick="pilihTipe('wallet')" 
-              class="w-full bg-[#111] hover:bg-[#1a1a1a] active:scale-95 p-4 rounded-3xl flex items-center gap-4 transition-all">
-        <div class="w-11 h-11 bg-green-500/10 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">📱</div>
-        <div>
-          <div class="text-lg font-semibold">Cek E-Wallet</div>
-          <div class="text-green-400 text-xs">DANA • OVO • GoPay • ShopeePay • dll</div>
-        </div>
-      </button>
-    </div>
-
-    <!-- SELECTION SCREEN -->
-    <div id="selectionScreen" class="hidden">
-      <div class="flex justify-between items-center mb-4">
-        <button onclick="backToMain()" class="text-green-400 text-sm">← Kembali</button>
-        <h2 id="selectionTitle" class="text-xl font-bold"></h2>
-      </div>
-      <div id="gridContainer" class="grid gap-3"></div>
-    </div>
-
-    <!-- INPUT SCREEN -->
-    <div id="inputScreen" class="hidden">
-      <div class="flex justify-between mb-4">
-        <button onclick="backToSelection()" class="text-green-400 text-sm">← Kembali</button>
-        <div id="selectedName" class="font-semibold text-lg"></div>
-      </div>
-      <input id="nomorInput" type="tel" maxlength="20"
-             class="w-full bg-[#111] rounded-3xl py-5 text-center text-2xl focus:outline-none placeholder-gray-500"
-             placeholder="Masukkan nomor rekening / HP">
-      <button onclick="cekRekening()" 
-              class="mt-7 w-full bg-green-500 hover:bg-green-400 text-black font-bold py-5 rounded-3xl active:scale-95">
-        ✅ CEK SEKARANG
-      </button>
-    </div>
-
-    <!-- RESULT -->
-    <div id="resultScreen" class="hidden">
-      <div id="resultCard" class="bg-[#111] rounded-3xl p-6 text-center min-h-[260px]"></div>
-      <div class="flex gap-3 mt-6">
-        <button onclick="cekLagi()" class="flex-1 bg-[#222] py-4 rounded-3xl text-sm font-medium">🔄 Cek Lagi</button>
-        <button onclick="backToMain()" class="flex-1 bg-green-500 text-black py-4 rounded-3xl text-sm font-medium">🏠 Menu Utama</button>
-      </div>
-    </div>
+<body>
+<div class="wrapper">
+  <div class="header">
+    <div class="badge"><span>●</span> MP1 VERIFIED <span>●</span></div>
+    <h1>Cek <span>Rekening</span> &amp;<br/>E-Wallet</h1>
+    <p>Akurat • Instan • Terpercaya</p>
   </div>
 
-  <script>
-    const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
-    let isBank = true, kodeTerpilih = "", namaTerpilih = "";
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('bank')">🏦 Bank</button>
+    <button class="tab-btn" onclick="switchTab('ewallet')">📱 E-Wallet</button>
+  </div>
 
-    const BANKS = {
-      'BCA':'bank_bca','BNI':'bank_bni','BRI':'bank_bri','MANDIRI':'bank_mandiri',
-      'BSI':'bank_bsm','PERMATA':'bank_permata','CIMB':'bank_cimb','BTN':'bank_btn',
-      'DANAMON':'bank_danamon','JAGO':'bank_artos','SEABANK':'bank_kesejahteraan_ekonomi',
-      'BLU':'bank_royal','JENIUS':'bank_tabungan_pensiunan_nasional','MEGA':'bank_mega',
-      'MAYBANK':'bank_bii','PANIN':'bank_panin','SINARMAS':'bank_sinarmas'
-    };
+  <!-- BANK PANEL -->
+  <div class="panel active" id="panel-bank">
+    <div class="card">
+      <div class="field">
+        <label>Pilih Bank</label>
+        <select id="bank-select">
+          <option value="">-- Pilih Bank --</option>
+          <option value="bank_bca">BCA</option>
+          <option value="bank_bni">BNI</option>
+          <option value="bank_bri">BRI</option>
+          <option value="bank_mandiri">MANDIRI</option>
+          <option value="bank_bsm">BSI</option>
+          <option value="bank_permata">PERMATA</option>
+          <option value="bank_cimb">CIMB</option>
+          <option value="bank_btn">BTN</option>
+          <option value="bank_danamon">DANAMON</option>
+          <option value="bank_artos">JAGO</option>
+          <option value="bank_kesejahteraan_ekonomi">SEABANK</option>
+          <option value="bank_royal">BLU</option>
+          <option value="bank_tabungan_pensiunan_nasional">JENIUS</option>
+          <option value="bank_mega">MEGA</option>
+          <option value="bank_bii">MAYBANK</option>
+          <option value="bank_panin">PANIN</option>
+          <option value="bank_sinarmas">SINARMAS</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nomor Rekening</label>
+        <input type="text" id="bank-number" placeholder="Contoh: 1234567890" inputmode="numeric" />
+      </div>
+      <button class="btn" id="btn-bank" onclick="checkBank()">
+        <span id="btn-bank-text">🔍 Cek Rekening</span>
+      </button>
+    </div>
+    <div class="result" id="result-bank"></div>
+  </div>
 
-    const WALLETS = {
-      'DANA':'wallet_dana','OVO':'wallet_ovo','GOPAY':'gopay_user',
-      'SHOPEEPAY':'wallet_shopeepay','LINK AJA':'wallet_linkaja',
-      'I.SAKU':'wallet_isaku','AstraPay':'wallet_astrapay','QRIS':'qris'
-    };
+  <!-- E-WALLET PANEL -->
+  <div class="panel" id="panel-ewallet">
+    <div class="card">
+      <div class="field">
+        <label>Pilih E-Wallet</label>
+        <select id="ew-select">
+          <option value="">-- Pilih E-Wallet --</option>
+          <option value="wallet_dana">DANA</option>
+          <option value="wallet_ovo">OVO</option>
+          <option value="gopay_user">GOPAY</option>
+          <option value="wallet_shopeepay">SHOPEEPAY</option>
+          <option value="wallet_linkaja">LINK AJA</option>
+          <option value="wallet_isaku">I.SAKU</option>
+          <option value="wallet_astrapay">AstraPay</option>
+          <option value="qris">QRIS</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Nomor HP</label>
+        <input type="text" id="ew-number" placeholder="Contoh: 081234567890" inputmode="numeric" />
+      </div>
+      <button class="btn" id="btn-ew" onclick="checkEwallet()">
+        <span id="btn-ew-text">🔍 Cek E-Wallet</span>
+      </button>
+    </div>
+    <div class="result" id="result-ew"></div>
+  </div>
 
-    function initTelegram() {
-      Telegram.WebApp.ready();
-      Telegram.WebApp.expand();
-      Telegram.WebApp.setHeaderColor("#0a0a0a");
-      Telegram.WebApp.setBackgroundColor("#0a0a0a");
+  <p class="footer-note">Data real-time dari sistem perbankan Indonesia</p>
+</div>
+
+<script>
+  const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
+
+  function initTelegram() {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+    Telegram.WebApp.setHeaderColor("#0d0f14");
+    Telegram.WebApp.setBackgroundColor("#0d0f14");
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    if (tab === 'bank') {
+      document.querySelector('.tab-btn:first-child').classList.add('active');
+      document.getElementById('panel-bank').classList.add('active');
+      document.getElementById('panel-ewallet').classList.remove('active');
+    } else {
+      document.querySelector('.tab-btn:last-child').classList.add('active');
+      document.getElementById('panel-bank').classList.remove('active');
+      document.getElementById('panel-ewallet').classList.add('active');
     }
+  }
 
-    function pilihTipe(tipe) {
-      isBank = tipe === 'bank';
-      document.getElementById('mainMenu').classList.add('hidden');
-      document.getElementById('selectionScreen').classList.remove('hidden');
-      document.getElementById('selectionTitle').innerHTML = isBank ? '🏦 Pilih Bank' : '📱 Pilih E-Wallet';
+  function setLoading(btnId, textId, loading) {
+    const btn = document.getElementById(btnId);
+    btn.disabled = loading;
+    document.getElementById(textId).innerHTML = loading 
+      ? '<span class="spinner"></span>' 
+      : '🔍 Cek Sekarang';
+  }
 
-      const container = document.getElementById('gridContainer');
-      container.innerHTML = '';
-      container.className = isBank ? 'grid grid-cols-3 gap-3' : 'grid grid-cols-2 gap-3';
+  async function checkBank() {
+    const bankCode = document.getElementById('bank-select').value;
+    const number = document.getElementById('bank-number').value.trim();
+    if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
 
-      const data = isBank ? BANKS : WALLETS;
-      Object.keys(data).forEach(key => {
-        const div = document.createElement('div');
-        div.className = `bg-[#111] rounded-2xl p-3 text-center cursor-pointer hover:bg-[#1a1a1a] active:scale-95 transition-all`;
-        div.innerHTML = `<div class="text-4xl mb-1">${isBank ? '🏦' : '📱'}</div><div class="text-xs font-medium">${key}</div>`;
-        div.onclick = () => { kodeTerpilih = data[key]; namaTerpilih = key; showInput(); };
-        container.appendChild(div);
+    setLoading('btn-bank', 'btn-bank-text', true);
+    const resultEl = document.getElementById('result-bank');
+
+    try {
+      const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          api_key: API_KEY,
+          bank_code: bankCode,
+          account_number: number
+        })
       });
-    }
+      const json = await res.json();
 
-    function showInput() {
-      document.getElementById('selectionScreen').classList.add('hidden');
-      document.getElementById('inputScreen').classList.remove('hidden');
-      document.getElementById('selectedName').textContent = namaTerpilih;
-      document.getElementById('nomorInput').focus();
-    }
-
-    function backToMain() {
-      document.getElementById('mainMenu').classList.remove('hidden');
-      document.getElementById('selectionScreen').classList.add('hidden');
-      document.getElementById('inputScreen').classList.add('hidden');
-      document.getElementById('resultScreen').classList.add('hidden');
-    }
-
-    function backToSelection() {
-      document.getElementById('inputScreen').classList.add('hidden');
-      document.getElementById('selectionScreen').classList.remove('hidden');
-    }
-
-    async function cekRekening() {
-      const nomor = document.getElementById('nomorInput').value.trim();
-      if (!nomor) return alert("Masukkan nomor dulu bro!");
-
-      document.getElementById('inputScreen').classList.add('hidden');
-      document.getElementById('resultScreen').classList.remove('hidden');
-
-      const card = document.getElementById('resultCard');
-      card.innerHTML = `<div class="flex justify-center py-14"><div class="animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full"></div></div>`;
-
-      const url = isBank ? "https://rfpdev.xyz/api/check-rekening" : "https://rfpdev.xyz/api/check-ewallet";
-      const payload = {
-        api_key: API_KEY,
-        [isBank ? 'bank_code' : 'ewallet_code']: kodeTerpilih,
-        [isBank ? 'account_number' : 'phone_number']: nomor.replace(/[^0-9]/g,'')
-      };
-
-      try {
-        const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(payload) });
-        const data = await res.json();
-
-        if (data.status === 'success') {
-          const nama = data.data?.customer_name || 'Tidak terdeteksi';
-          card.innerHTML = `
-            <div class="text-6xl mb-4">✅</div>
-            <h3 class="text-green-400 font-bold mb-5">VERIFIKASI BERHASIL</h3>
-            <div class="text-left space-y-3 text-sm">
-              <div>Jenis Akun <span class="font-semibold block">${namaTerpilih}</span></div>
-              <div>Nomor <span class="font-mono block">${nomor}</span></div>
-              <div>Nama Pemilik <span class="font-semibold text-green-300 block">${nama}</span></div>
+      if (json.status === 'success') {
+        const nama = json.data?.customer_name || 'Tidak terdeteksi';
+        resultEl.className = 'result show success';
+        resultEl.innerHTML = `
+          <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+          <div class="result-body">
+            <div class="result-name">${nama}</div>
+            <div style="margin-top:12px">
+              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.textContent='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
             </div>
-          `;
-        } else {
-          card.innerHTML = `<div class="text-6xl mb-4">❌</div><p class="text-red-400">${data.message || 'Data tidak ditemukan'}</p>`;
-        }
-      } catch(e) {
-        card.innerHTML = `<div class="text-6xl mb-4">⚠️</div><p class="text-gray-400">Koneksi error</p>`;
+          </div>`;
+      } else {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
       }
+    } catch (e) {
+      resultEl.className = 'result show error';
+      resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+    } finally {
+      setLoading('btn-bank', 'btn-bank-text', false);
     }
+  }
 
-    function cekLagi() {
-      document.getElementById('resultScreen').classList.add('hidden');
-      document.getElementById('inputScreen').classList.remove('hidden');
-      document.getElementById('nomorInput').value = '';
+  async function checkEwallet() {
+    const walletCode = document.getElementById('ew-select').value;
+    const number = document.getElementById('ew-number').value.trim();
+    if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
+
+    setLoading('btn-ew', 'btn-ew-text', true);
+    const resultEl = document.getElementById('result-ew');
+
+    try {
+      const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          api_key: API_KEY,
+          ewallet_code: walletCode,
+          phone_number: number
+        })
+      });
+      const json = await res.json();
+
+      if (json.status === 'success') {
+        const nama = json.data?.customer_name || 'Tidak terdeteksi';
+        resultEl.className = 'result show success';
+        resultEl.innerHTML = `
+          <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+          <div class="result-body">
+            <div class="result-name">${nama}</div>
+            <div style="margin-top:12px">
+              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.textContent='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+            </div>
+          </div>`;
+      } else {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+      }
+    } catch (e) {
+      resultEl.className = 'result show error';
+      resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+    } finally {
+      setLoading('btn-ew', 'btn-ew-text', false);
     }
+  }
 
-    // INIT
-    initTelegram();
-  </script>
+  // INIT
+  initTelegram();
+</script>
 </body>
 </html>
