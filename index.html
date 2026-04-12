@@ -88,7 +88,7 @@
     const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
     let isBank = true, kodeTerpilih = "", namaTerpilih = "";
 
-    const BANKS = { /* sama seperti sebelumnya */ 
+    const BANKS = {
       'BCA':'bank_bca','BNI':'bank_bni','BRI':'bank_bri','MANDIRI':'bank_mandiri',
       'BSI':'bank_bsm','PERMATA':'bank_permata','CIMB':'bank_cimb','BTN':'bank_btn',
       'DANAMON':'bank_danamon','JAGO':'bank_artos','SEABANK':'bank_kesejahteraan_ekonomi',
@@ -102,6 +102,36 @@
       'I.SAKU':'wallet_isaku','AstraPay':'wallet_astrapay','QRIS':'qris'
     };
 
+    // IKON BANK & E-WALLET YANG LEBIH NYATA (SVG + warna resmi)
+    const ICONS = {
+      'BCA': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#0066B3"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">BCA</text></svg>`,
+      'BNI': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#0033A0"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">BNI</text></svg>`,
+      'BRI': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#ED1C24"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">BRI</text></svg>`,
+      'MANDIRI': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00A651"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">MANDIRI</text></svg>`,
+      'BSI': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00A651"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">BSI</text></svg>`,
+      'PERMATA': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00AEEF"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">PERMATA</text></svg>`,
+      'CIMB': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#E30613"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">CIMB</text></svg>`,
+      'BTN': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#003087"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">BTN</text></svg>`,
+      'DANAMON': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00AEEF"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">DANA</text></svg>`,
+      'JAGO': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00A651"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">JAGO</text></svg>`,
+      'SEABANK': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#003087"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">SEA</text></svg>`,
+      'BLU': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#0066B3"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">BLU</text></svg>`,
+      'JENIUS': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00A651"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">JENIUS</text></svg>`,
+      'MEGA': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#E30613"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">MEGA</text></svg>`,
+      'MAYBANK': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#003087"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">MAY</text></svg>`,
+      'PANIN': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00AEEF"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">PANIN</text></svg>`,
+      'SINARMAS': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#E30613"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">SINA</text></svg>`,
+
+      'DANA': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#FFCC00"/><text x="24" y="31" font-size="18" font-weight="700" fill="#000" text-anchor="middle">DANA</text></svg>`,
+      'OVO': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#4C2C8F"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">OVO</text></svg>`,
+      'GOPAY': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00A651"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">GOPAY</text></svg>`,
+      'SHOPEEPAY': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#FF6600"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">SHOPEE</text></svg>`,
+      'LINK AJA': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#00AEEF"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">LINK</text></svg>`,
+      'I.SAKU': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#FF6600"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">I.SAKU</text></svg>`,
+      'AstraPay': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#003087"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">ASTRA</text></svg>`,
+      'QRIS': `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="8" fill="#000"/><text x="24" y="31" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">QRIS</text></svg>`
+    };
+
     function initTelegram() {
       Telegram.WebApp.ready();
       Telegram.WebApp.expand();
@@ -109,16 +139,10 @@
       Telegram.WebApp.setBackgroundColor("#0a0a0a");
     }
 
-    // === RIWAYAT ===
+    // === RIWAYAT (sama seperti sebelumnya) ===
     function saveToHistory(isBank, namaTerpilih, nomor, namaPemilik) {
       let history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
-      history.unshift({
-        type: isBank ? 'BANK' : 'WALLET',
-        nama: namaTerpilih,
-        nomor: nomor,
-        pemilik: namaPemilik,
-        time: new Date().toLocaleString('id-ID', {dateStyle:'short', timeStyle:'short'})
-      });
+      history.unshift({ type: isBank ? 'BANK' : 'WALLET', nama: namaTerpilih, nomor, pemilik: namaPemilik, time: new Date().toLocaleString('id-ID', {dateStyle:'short', timeStyle:'short'}) });
       if (history.length > 20) history.pop();
       localStorage.setItem('cekHistory', JSON.stringify(history));
     }
@@ -132,36 +156,24 @@
     function renderHistory() {
       const list = document.getElementById('historyList');
       const history = JSON.parse(localStorage.getItem('cekHistory') || '[]');
-      list.innerHTML = '';
+      list.innerHTML = history.length === 0 
+        ? `<div class="text-center py-10 text-gray-400">Belum ada riwayat cek</div>` 
+        : history.map(item => `
+          <div class="bg-[#111] rounded-3xl p-4 cursor-pointer hover:bg-[#1a1a1a]" onclick="loadFromHistory('${item.type}','${item.nama}','${item.nomor}')">
+            <div class="flex justify-between text-xs text-gray-400 mb-1"><span>${item.type} • ${item.nama}</span><span>${item.time}</span></div>
+            <div class="font-medium">${item.nomor}</div>
+            <div class="text-green-300">${item.pemilik}</div>
+          </div>`).join('');
+    }
 
-      if (history.length === 0) {
-        list.innerHTML = `<div class="text-center py-10 text-gray-400">Belum ada riwayat cek</div>`;
-        return;
-      }
-
-      history.forEach(item => {
-        const div = document.createElement('div');
-        div.className = `bg-[#111] rounded-3xl p-4 cursor-pointer hover:bg-[#1a1a1a]`;
-        div.innerHTML = `
-          <div class="flex justify-between text-xs text-gray-400 mb-1">
-            <span>${item.type} • ${item.nama}</span>
-            <span>${item.time}</span>
-          </div>
-          <div class="font-medium">${item.nomor}</div>
-          <div class="text-green-300">${item.pemilik}</div>
-        `;
-        div.onclick = () => {
-          // Isi ulang langsung ke input
-          isBank = item.type === 'BANK';
-          kodeTerpilih = isBank ? Object.keys(BANKS).find(k => BANKS[k] === item.nama) ? BANKS[item.nama] : '' : WALLETS[item.nama];
-          namaTerpilih = item.nama;
-          document.getElementById('historyScreen').classList.add('hidden');
-          document.getElementById('inputScreen').classList.remove('hidden');
-          document.getElementById('selectedName').textContent = item.nama;
-          document.getElementById('nomorInput').value = item.nomor;
-        };
-        list.appendChild(div);
-      });
+    function loadFromHistory(type, nama, nomor) {
+      isBank = type === 'BANK';
+      kodeTerpilih = isBank ? BANKS[nama] || '' : WALLETS[nama] || '';
+      namaTerpilih = nama;
+      document.getElementById('historyScreen').classList.add('hidden');
+      document.getElementById('inputScreen').classList.remove('hidden');
+      document.getElementById('selectedName').textContent = nama;
+      document.getElementById('nomorInput').value = nomor;
     }
 
     function clearHistory() {
@@ -171,7 +183,6 @@
       }
     }
 
-    // === Fungsi lain tetap sama (pilihTipe, showInput, backToMain, dll) ===
     function pilihTipe(tipe) {
       isBank = tipe === 'bank';
       document.getElementById('mainMenu').classList.add('hidden');
@@ -186,7 +197,7 @@
       Object.keys(data).forEach(key => {
         const div = document.createElement('div');
         div.className = `bg-[#111] rounded-2xl p-3 text-center cursor-pointer hover:bg-[#1a1a1a] active:scale-95 transition-all`;
-        div.innerHTML = `<div class="text-4xl mb-1">${isBank ? '🏦' : '📱'}</div><div class="text-xs font-medium">${key}</div>`;
+        div.innerHTML = ICONS[key] || `<div class="text-4xl mb-1">${isBank ? '🏦' : '📱'}</div><div class="text-xs font-medium">${key}</div>`;
         div.onclick = () => { kodeTerpilih = data[key]; namaTerpilih = key; showInput(); };
         container.appendChild(div);
       });
@@ -235,7 +246,7 @@
 
         if (data.status === 'success') {
           const nama = data.data?.customer_name || 'Tidak terdeteksi';
-          saveToHistory(isBank, namaTerpilih, nomor, nama);   // ← simpan ke riwayat
+          saveToHistory(isBank, namaTerpilih, nomor, nama);
 
           card.innerHTML = `
             <div class="text-6xl mb-4">✅</div>
@@ -260,7 +271,7 @@
         const btn = event.currentTarget;
         const original = btn.innerHTML;
         btn.innerHTML = `✅ Berhasil disalin!`;
-        setTimeout(() => { btn.innerHTML = original; }, 2000);
+        setTimeout(() => btn.innerHTML = original, 2000);
       });
     }
 
@@ -270,7 +281,6 @@
       document.getElementById('nomorInput').value = '';
     }
 
-    // INIT
     initTelegram();
   </script>
 </body>
