@@ -29,7 +29,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       padding: 1rem;
       position: relative;
       overflow-x: hidden;
@@ -45,72 +44,69 @@
     }
     .wrapper { width: 100%; max-width: 420px; z-index: 1; }
     .header { text-align: center; margin-bottom: 1.8rem; }
-    .header .badge {
+    .badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(79,143,255,0.1); border: 1px solid rgba(79,143,255,0.25);
-      border-radius: 100px; padding: 4px 14px; font-size: 0.72rem; font-weight: 600;
-      color: var(--accent); text-transform: uppercase;
+      background: rgba(79,143,255,0.12); border: 1px solid rgba(79,143,255,0.3);
+      border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.5px;
     }
-    .header h1 { font-size: 1.85rem; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+    .header h1 { font-size: 1.85rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; }
     .header h1 span { color: var(--accent); }
-    .header p { color: var(--muted); font-size: 0.88rem; margin-top: 0.4rem; }
+    .header p { color: var(--muted); font-size: 0.9rem; margin-top: 0.4rem; }
     .tabs {
       display: grid; grid-template-columns: 1fr 1fr; background: var(--surface2);
-      border-radius: 12px; padding: 4px; margin-bottom: 1.5rem; border: 1px solid var(--border);
+      border-radius: 14px; padding: 5px; border: 1px solid var(--border); margin-bottom: 1.6rem;
     }
     .tab-btn {
-      padding: 12px; border: none; background: transparent; color: var(--muted);
-      font-family: var(--sans); font-size: 0.9rem; font-weight: 600; border-radius: 9px;
-      cursor: pointer; transition: all 0.25s;
+      padding: 14px 16px; border: none; background: transparent; color: var(--muted);
+      font-weight: 600; font-size: 0.95rem; border-radius: 10px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.25s;
     }
     .tab-btn.active {
-      background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(79,143,255,0.35);
+      background: var(--accent); color: #fff; box-shadow: 0 4px 20px rgba(79,143,255,0.4);
     }
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 20px; padding: 1.8rem;
     }
     .field { margin-bottom: 1.4rem; }
-    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
     select, input {
       width: 100%; background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 10px; padding: 13px 14px; color: var(--text);
+      border-radius: 12px; padding: 14px 16px; color: var(--text);
       font-family: var(--mono); font-size: 1rem; outline: none;
     }
     .btn {
       width: 100%; padding: 15px; background: var(--accent); color: #fff;
-      border: none; border-radius: 12px; font-family: var(--sans); font-size: 1rem;
-      font-weight: 600; cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 8px;
+      border: none; border-radius: 12px; font-weight: 600; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      cursor: pointer;
     }
-    .spinner {
-      width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3);
-      border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite;
-    }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .result { margin-top: 1.5rem; border-radius: 14px; display: none; }
+    .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
     .result.show { display: block; }
-    .result-header { padding: 12px 18px; font-size: 0.75rem; font-weight: 600; border-radius: 14px 14px 0 0; }
-    .result.success .result-header { background: rgba(56,245,176,0.12); color: var(--accent2); }
-    .result.error .result-header { background: rgba(255,92,92,0.12); color: var(--danger); }
-    .result-body {
-      padding: 1.4rem 1.6rem; background: var(--surface2); border: 1px solid var(--border);
-      border-top: none; border-radius: 0 0 14px 14px;
-    }
-    .result-name { font-size: 1.45rem; font-weight: 700; margin-bottom: 0.8rem; }
+    .result.success { background: rgba(56,245,176,0.1); border: 1px solid rgba(56,245,176,0.3); }
+    .result.error { background: rgba(255,92,92,0.1); border: 1px solid rgba(255,92,92,0.3); }
+    .result-header { padding: 14px 18px; font-weight: 700; font-size: 0.85rem; border-radius: 16px 16px 0 0; }
+    .result.success .result-header { background: rgba(56,245,176,0.15); color: #38f5b0; }
+    .result.error .result-header { background: rgba(255,92,92,0.15); color: #ff5c5c; }
+    .result-body { padding: 1.4rem 1.6rem; }
+    .result-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
     .copy-btn {
-      margin-top: 12px; width: 100%; padding: 12px; background: #222; color: #fff;
+      margin-top: 10px; width: 100%; padding: 13px; background: #222; color: #fff;
       border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
     }
-    .footer-note { text-align: center; margin-top: 1.8rem; font-size: 0.75rem; color: var(--muted); }
+    .footer-note { text-align: center; margin-top: 2rem; font-size: 0.78rem; color: var(--muted); }
   </style>
 </head>
 <body>
 <div class="wrapper">
   <div class="header">
-    <div class="badge"><span>●</span> MP1 VERIFIED <span>●</span></div>
+    <div class="badge">● SECURITY VERIFIED ●</div>
     <h1>Cek <span>Rekening</span> &amp;<br/>E-Wallet</h1>
-    <p>Akurat • Instan • Terpercaya</p>
+    <p>Pastikan data benar sebelum transfer</p>
   </div>
 
   <div class="tabs">
@@ -146,10 +142,10 @@
       </div>
       <div class="field">
         <label>Nomor Rekening</label>
-        <input type="text" id="bank-number" placeholder="Contoh: 1234567890" inputmode="numeric" />
+        <input type="text" id="bank-number" placeholder="Contoh: 12345678" inputmode="numeric" />
       </div>
       <button class="btn" id="btn-bank" onclick="checkBank()">
-        <span id="btn-bank-text">🔍 Cek Rekening</span>
+        🔍 <span id="btn-bank-text">Cek Rekening</span>
       </button>
     </div>
     <div class="result" id="result-bank"></div>
@@ -174,10 +170,10 @@
       </div>
       <div class="field">
         <label>Nomor HP</label>
-        <input type="text" id="ew-number" placeholder="Contoh: 081234567890" inputmode="numeric" />
+        <input type="text" id="ew-number" placeholder="Contoh: 0812345678" inputmode="numeric" />
       </div>
       <button class="btn" id="btn-ew" onclick="checkEwallet()">
-        <span id="btn-ew-text">🔍 Cek E-Wallet</span>
+        🔍 <span id="btn-ew-text">Cek E-Wallet</span>
       </button>
     </div>
     <div class="result" id="result-ew"></div>
@@ -198,23 +194,18 @@
 
   function switchTab(tab) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    if (tab === 'bank') {
-      document.querySelector('.tab-btn:first-child').classList.add('active');
-      document.getElementById('panel-bank').classList.add('active');
-      document.getElementById('panel-ewallet').classList.remove('active');
-    } else {
-      document.querySelector('.tab-btn:last-child').classList.add('active');
-      document.getElementById('panel-bank').classList.remove('active');
-      document.getElementById('panel-ewallet').classList.add('active');
-    }
+    if (tab === 'bank') document.querySelector('.tab-btn:first-child').classList.add('active');
+    else document.querySelector('.tab-btn:last-child').classList.add('active');
+
+    document.getElementById('panel-bank').classList.toggle('active', tab === 'bank');
+    document.getElementById('panel-ewallet').classList.toggle('active', tab === 'ewallet');
   }
 
-  function setLoading(btnId, textId, loading) {
+  function setLoading(btnId, loading) {
     const btn = document.getElementById(btnId);
     btn.disabled = loading;
-    document.getElementById(textId).innerHTML = loading 
-      ? '<span class="spinner"></span>' 
-      : '🔍 Cek Sekarang';
+    const text = document.getElementById(btnId + '-text');
+    text.innerHTML = loading ? '<span class="spinner"></span>' : '';
   }
 
   async function checkBank() {
@@ -222,18 +213,14 @@
     const number = document.getElementById('bank-number').value.trim();
     if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
 
-    setLoading('btn-bank', 'btn-bank-text', true);
+    setLoading('btn-bank', true);
     const resultEl = document.getElementById('result-bank');
 
     try {
       const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          api_key: API_KEY,
-          bank_code: bankCode,
-          account_number: number
-        })
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
       });
       const json = await res.json();
 
@@ -244,9 +231,7 @@
           <div class="result-header">✅ VERIFIKASI BERHASIL</div>
           <div class="result-body">
             <div class="result-name">${nama}</div>
-            <div style="margin-top:12px">
-              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.textContent='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-            </div>
+            <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
           </div>`;
       } else {
         resultEl.className = 'result show error';
@@ -256,7 +241,7 @@
       resultEl.className = 'result show error';
       resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
     } finally {
-      setLoading('btn-bank', 'btn-bank-text', false);
+      setLoading('btn-bank', false);
     }
   }
 
@@ -265,18 +250,14 @@
     const number = document.getElementById('ew-number').value.trim();
     if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
 
-    setLoading('btn-ew', 'btn-ew-text', true);
+    setLoading('btn-ew', true);
     const resultEl = document.getElementById('result-ew');
 
     try {
       const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          api_key: API_KEY,
-          ewallet_code: walletCode,
-          phone_number: number
-        })
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
       });
       const json = await res.json();
 
@@ -287,9 +268,7 @@
           <div class="result-header">✅ VERIFIKASI BERHASIL</div>
           <div class="result-body">
             <div class="result-name">${nama}</div>
-            <div style="margin-top:12px">
-              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.textContent='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-            </div>
+            <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
           </div>`;
       } else {
         resultEl.className = 'result show error';
@@ -299,7 +278,7 @@
       resultEl.className = 'result show error';
       resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
     } finally {
-      setLoading('btn-ew', 'btn-ew-text', false);
+      setLoading('btn-ew', false);
     }
   }
 
