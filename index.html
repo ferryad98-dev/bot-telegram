@@ -57,14 +57,7 @@
     }
     .btn:hover { box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent); transform: scale(1.03); }
 
-    .spinner {
-      width: 20px; height: 20px;
-      border: 3px solid rgba(0,255,136,0.3);
-      border-top-color: #00ff88;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite, neonPulse 1.2s ease-in-out infinite alternate;
-      box-shadow: 0 0 15px #00ff88, 0 0 25px #00ff88;
-    }
+    .spinner { width: 20px; height: 20px; border: 3px solid rgba(0,255,136,0.3); border-top-color: #00ff88; border-radius: 50%; animation: spin 0.8s linear infinite, neonPulse 1.2s ease-in-out infinite alternate; box-shadow: 0 0 15px #00ff88, 0 0 25px #00ff88; }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes neonPulse { 0% { box-shadow: 0 0 12px #00ff88; } 100% { box-shadow: 0 0 30px #00ff88, 0 0 45px #00ff88; } }
 
@@ -75,7 +68,7 @@
     .result.success .result-header { background: rgba(0,255,136,0.25); color: #000; }
     .result-body { padding: 1.4rem 1.6rem; }
     .result-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); text-shadow: 0 0 15px var(--accent); }
-    .copy-btn { margin-top: 10px; width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
+    .copy-btn { margin-top: 12px; width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
     .footer-note { text-align: center; margin-top: 2rem; font-size: 0.78rem; color: var(--muted); }
   </style>
 </head>
@@ -92,7 +85,7 @@
     <button class="tab-btn" onclick="switchTab('ewallet')">📱 E-Wallet</button>
   </div>
 
-  <!-- BANK -->
+  <!-- BANK PANEL -->
   <div class="panel active" id="panel-bank">
     <div class="card">
       <div class="field"><label>Pilih Bank</label>
@@ -116,7 +109,7 @@
     <div class="result" id="result-bank"></div>
   </div>
 
-  <!-- E-WALLET -->
+  <!-- E-WALLET PANEL -->
   <div class="panel" id="panel-ewallet">
     <div class="card">
       <div class="field"><label>Pilih E-Wallet</label>
@@ -168,6 +161,7 @@
   async function checkBank() {
     const bankCode = document.getElementById('bank-select').value;
     const number = document.getElementById('bank-number').value.trim();
+    const bankName = document.getElementById('bank-select').options[document.getElementById('bank-select').selectedIndex].text;
     if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
 
     setLoading('btn-bank', true);
@@ -176,7 +170,7 @@
     try {
       const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
       });
       const json = await res.json();
@@ -187,7 +181,9 @@
         resultEl.innerHTML = `
           <div class="result-header">✅ VERIFIKASI BERHASIL</div>
           <div class="result-body">
-            <div class="result-name">${nama}</div>
+            <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">${bankName}</span></div>
+            <div style="margin:12px 0"><strong>Nomor Rekening</strong><br><span style="font-family:monospace">${number}</span></div>
+            <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
             <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
           </div>`;
       } else {
@@ -205,6 +201,7 @@
   async function checkEwallet() {
     const walletCode = document.getElementById('ew-select').value;
     const number = document.getElementById('ew-number').value.trim();
+    const walletName = document.getElementById('ew-select').options[document.getElementById('ew-select').selectedIndex].text;
     if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
 
     setLoading('btn-ew', true);
@@ -213,7 +210,7 @@
     try {
       const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
       });
       const json = await res.json();
@@ -224,7 +221,9 @@
         resultEl.innerHTML = `
           <div class="result-header">✅ VERIFIKASI BERHASIL</div>
           <div class="result-body">
-            <div class="result-name">${nama}</div>
+            <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">${walletName}</span></div>
+            <div style="margin:12px 0"><strong>Nomor HP</strong><br><span style="font-family:monospace">${number}</span></div>
+            <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
             <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
           </div>`;
       } else {
