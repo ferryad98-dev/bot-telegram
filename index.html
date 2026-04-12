@@ -19,26 +19,13 @@
       --mono: 'DM Mono', monospace;
       --sans: 'Sora', sans-serif;
     }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
-      padding: 1rem;
-      position: relative;
-      overflow-x: hidden;
-    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
+      content: ''; position: fixed; inset: 0;
       background-image: linear-gradient(rgba(0,255,136,0.06) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(0,255,136,0.06) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      animation: gridPulse 8s linear infinite;
+      background-size: 40px 40px; pointer-events: none; animation: gridPulse 8s linear infinite;
     }
-
     @keyframes gridPulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; }
@@ -67,14 +54,11 @@
       border: none; border-radius: 12px; font-weight: 600; font-size: 1rem;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       cursor: pointer; box-shadow: 0 0 20px var(--accent);
-      transition: all 0.3s;
     }
     .btn:hover { box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent); transform: scale(1.03); }
 
-    /* ==================== NEON LOADING ANIMATION ==================== */
     .spinner {
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       border: 3px solid rgba(0,255,136,0.3);
       border-top-color: #00ff88;
       border-radius: 50%;
@@ -82,10 +66,7 @@
       box-shadow: 0 0 15px #00ff88, 0 0 25px #00ff88;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes neonPulse {
-      0%   { box-shadow: 0 0 12px #00ff88; }
-      100% { box-shadow: 0 0 30px #00ff88, 0 0 45px #00ff88; }
-    }
+    @keyframes neonPulse { 0% { box-shadow: 0 0 12px #00ff88; } 100% { box-shadow: 0 0 30px #00ff88, 0 0 45px #00ff88; } }
 
     .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
     .result.show { display: block; animation: resultGlow 2s ease-in-out infinite alternate; }
@@ -111,34 +92,21 @@
     <button class="tab-btn" onclick="switchTab('ewallet')">📱 E-Wallet</button>
   </div>
 
-  <!-- BANK PANEL -->
+  <!-- BANK -->
   <div class="panel active" id="panel-bank">
     <div class="card">
-      <div class="field">
-        <label>Pilih Bank</label>
-        <select id="bank-select">
-          <option value="">-- Pilih Bank --</option>
-          <option value="bank_bca">BCA</option>
-          <option value="bank_bni">BNI</option>
-          <option value="bank_bri">BRI</option>
-          <option value="bank_mandiri">MANDIRI</option>
-          <option value="bank_bsm">BSI</option>
-          <option value="bank_permata">PERMATA</option>
-          <option value="bank_cimb">CIMB</option>
-          <option value="bank_btn">BTN</option>
-          <option value="bank_danamon">DANAMON</option>
-          <option value="bank_artos">JAGO</option>
-          <option value="bank_kesejahteraan_ekonomi">SEABANK</option>
-          <option value="bank_royal">BLU</option>
-          <option value="bank_tabungan_pensiunan_nasional">JENIUS</option>
-          <option value="bank_mega">MEGA</option>
-          <option value="bank_bii">MAYBANK</option>
-          <option value="bank_panin">PANIN</option>
-          <option value="bank_sinarmas">SINARMAS</option>
+      <div class="field"><label>Pilih Bank</label>
+        <select id="bank-select"><option value="">-- Pilih Bank --</option>
+          <option value="bank_bca">BCA</option><option value="bank_bni">BNI</option><option value="bank_bri">BRI</option>
+          <option value="bank_mandiri">MANDIRI</option><option value="bank_bsm">BSI</option><option value="bank_permata">PERMATA</option>
+          <option value="bank_cimb">CIMB</option><option value="bank_btn">BTN</option><option value="bank_danamon">DANAMON</option>
+          <option value="bank_artos">JAGO</option><option value="bank_kesejahteraan_ekonomi">SEABANK</option>
+          <option value="bank_royal">BLU</option><option value="bank_tabungan_pensiunan_nasional">JENIUS</option>
+          <option value="bank_mega">MEGA</option><option value="bank_bii">MAYBANK</option>
+          <option value="bank_panin">PANIN</option><option value="bank_sinarmas">SINARMAS</option>
         </select>
       </div>
-      <div class="field">
-        <label>Nomor Rekening</label>
+      <div class="field"><label>Nomor Rekening</label>
         <input type="text" id="bank-number" placeholder="Contoh: 12345678" inputmode="numeric" />
       </div>
       <button class="btn" id="btn-bank" onclick="checkBank()">
@@ -148,25 +116,17 @@
     <div class="result" id="result-bank"></div>
   </div>
 
-  <!-- E-WALLET PANEL -->
+  <!-- E-WALLET -->
   <div class="panel" id="panel-ewallet">
     <div class="card">
-      <div class="field">
-        <label>Pilih E-Wallet</label>
-        <select id="ew-select">
-          <option value="">-- Pilih E-Wallet --</option>
-          <option value="wallet_dana">DANA</option>
-          <option value="wallet_ovo">OVO</option>
-          <option value="gopay_user">GOPAY</option>
-          <option value="wallet_shopeepay">SHOPEEPAY</option>
-          <option value="wallet_linkaja">LINK AJA</option>
-          <option value="wallet_isaku">I.SAKU</option>
-          <option value="wallet_astrapay">AstraPay</option>
-          <option value="qris">QRIS</option>
+      <div class="field"><label>Pilih E-Wallet</label>
+        <select id="ew-select"><option value="">-- Pilih E-Wallet --</option>
+          <option value="wallet_dana">DANA</option><option value="wallet_ovo">OVO</option><option value="gopay_user">GOPAY</option>
+          <option value="wallet_shopeepay">SHOPEEPAY</option><option value="wallet_linkaja">LINK AJA</option>
+          <option value="wallet_isaku">I.SAKU</option><option value="wallet_astrapay">AstraPay</option><option value="qris">QRIS</option>
         </select>
       </div>
-      <div class="field">
-        <label>Nomor HP</label>
+      <div class="field"><label>Nomor HP</label>
         <input type="text" id="ew-number" placeholder="Contoh: 0812345678" inputmode="numeric" />
       </div>
       <button class="btn" id="btn-ew" onclick="checkEwallet()">
@@ -205,9 +165,79 @@
     text.innerHTML = loading ? '<span class="spinner"></span>' : '';
   }
 
-  // Fungsi checkBank dan checkEwallet tetap sama (hanya spinner yang diubah)
-  async function checkBank() { /* ... sama seperti sebelumnya ... */ }
-  async function checkEwallet() { /* ... sama seperti sebelumnya ... */ }
+  async function checkBank() {
+    const bankCode = document.getElementById('bank-select').value;
+    const number = document.getElementById('bank-number').value.trim();
+    if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
+
+    setLoading('btn-bank', true);
+    const resultEl = document.getElementById('result-bank');
+
+    try {
+      const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
+      });
+      const json = await res.json();
+
+      if (json.status === 'success') {
+        const nama = json.data?.customer_name || 'Tidak terdeteksi';
+        resultEl.className = 'result show success';
+        resultEl.innerHTML = `
+          <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+          <div class="result-body">
+            <div class="result-name">${nama}</div>
+            <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+          </div>`;
+      } else {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+      }
+    } catch (e) {
+      resultEl.className = 'result show error';
+      resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+    } finally {
+      setLoading('btn-bank', false);
+    }
+  }
+
+  async function checkEwallet() {
+    const walletCode = document.getElementById('ew-select').value;
+    const number = document.getElementById('ew-number').value.trim();
+    if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
+
+    setLoading('btn-ew', true);
+    const resultEl = document.getElementById('result-ew');
+
+    try {
+      const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
+      });
+      const json = await res.json();
+
+      if (json.status === 'success') {
+        const nama = json.data?.customer_name || 'Tidak terdeteksi';
+        resultEl.className = 'result show success';
+        resultEl.innerHTML = `
+          <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+          <div class="result-body">
+            <div class="result-name">${nama}</div>
+            <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+          </div>`;
+      } else {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+      }
+    } catch (e) {
+      resultEl.className = 'result show error';
+      resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+    } finally {
+      setLoading('btn-ew', false);
+    }
+  }
 
   initTelegram();
 </script>
