@@ -13,9 +13,7 @@
       --surface: #141720;
       --surface2: #1c2030;
       --border: #252a3a;
-      --accent: #00ff88;          /* NEON HIJAU */
-      --accent2: #00ff88;         /* NEON HIJAU */
-      --danger: #ff5c5c;
+      --accent: #00ff88;
       --text: #e8ecf4;
       --muted: #6b7592;
       --mono: 'DM Mono', monospace;
@@ -38,21 +36,37 @@
                         linear-gradient(90deg, rgba(0,255,136,0.06) 1px, transparent 1px);
       background-size: 40px 40px;
       pointer-events: none;
+      animation: gridPulse 8s linear infinite;
     }
+
+    @keyframes gridPulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; }
     .header { text-align: center; margin-bottom: 1.8rem; }
     .badge {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.4);
+      background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.6);
       border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700;
-      color: var(--accent); text-shadow: 0 0 8px var(--accent);
+      color: var(--accent); animation: badgeFlicker 2s infinite alternate;
     }
+    @keyframes badgeFlicker {
+      0% { text-shadow: 0 0 8px var(--accent); }
+      100% { text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); }
+    }
+
     .header h1 { 
       font-size: 1.85rem; font-weight: 700; line-height: 1.15; 
-      letter-spacing: -0.03em; text-shadow: 0 0 15px var(--accent);
+      letter-spacing: -0.03em; 
+      animation: titleNeon 3s ease-in-out infinite alternate;
     }
-    .header h1 span { color: var(--accent); }
-    .header p { color: var(--muted); font-size: 0.9rem; margin-top: 0.4rem; }
+    @keyframes titleNeon {
+      0% { text-shadow: 0 0 10px var(--accent); }
+      100% { text-shadow: 0 0 30px var(--accent), 0 0 50px var(--accent); }
+    }
 
     .tabs {
       display: grid; grid-template-columns: 1fr 1fr; background: var(--surface2);
@@ -67,13 +81,17 @@
     .tab-btn.active {
       background: var(--accent); 
       color: #000; 
-      box-shadow: 0 0 20px var(--accent);
-      text-shadow: 0 0 10px #000;
+      box-shadow: 0 0 25px var(--accent);
+      animation: tabPulse 2s ease-in-out infinite alternate;
     }
-    
+    @keyframes tabPulse {
+      0% { box-shadow: 0 0 15px var(--accent); }
+      100% { box-shadow: 0 0 35px var(--accent), 0 0 50px var(--accent); }
+    }
+
     .panel { display: none; }
     .panel.active { display: block; }
-    
+
     .card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: 20px; padding: 1.8rem;
@@ -90,22 +108,28 @@
       border: none; border-radius: 12px; font-weight: 600; font-size: 1rem;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       cursor: pointer; box-shadow: 0 0 20px var(--accent);
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent);
+      transform: scale(1.03);
     }
     .spinner { width: 18px; height: 18px; border: 2px solid rgba(0,0,0,0.3); border-top-color: #000; border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    
+
     .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
-    .result.show { display: block; }
-    .result.success { background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.5); }
-    .result.error { background: rgba(255,92,92,0.1); border: 1px solid rgba(255,92,92,0.3); }
+    .result.show { display: block; animation: resultGlow 2s ease-in-out infinite alternate; }
+    .result.success { background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.6); }
     .result-header { 
       padding: 14px 18px; font-weight: 700; font-size: 0.85rem; 
-      border-radius: 16px 16px 0 0; text-shadow: 0 0 8px var(--accent);
+      border-radius: 16px 16px 0 0; text-shadow: 0 0 12px var(--accent);
     }
-    .result.success .result-header { background: rgba(0,255,136,0.2); color: #000; }
-    .result.error .result-header { background: rgba(255,92,92,0.15); color: #ff5c5c; }
+    .result.success .result-header { background: rgba(0,255,136,0.25); color: #000; }
     .result-body { padding: 1.4rem 1.6rem; }
-    .result-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); text-shadow: 0 0 10px var(--accent); }
+    .result-name { 
+      font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; 
+      color: var(--accent); text-shadow: 0 0 15px var(--accent);
+    }
     .copy-btn {
       margin-top: 10px; width: 100%; padding: 13px; background: #111; color: #fff;
       border: none; border-radius: 10px; font-weight: 600; cursor: pointer;
