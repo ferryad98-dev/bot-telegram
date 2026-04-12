@@ -2,126 +2,111 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CEK REKENING MP1</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap');
     body { font-family: 'Inter', system-ui, sans-serif; }
-    .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-    .card-hover:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 20px 25px -5px rgb(0 255 0 / 0.2); }
-    .neon-text { text-shadow: 0 0 15px rgb(0 255 0); }
+    .neon { text-shadow: 0 0 20px rgb(0 255 80); }
   </style>
 </head>
 <body class="bg-[#0a0a0a] text-white min-h-screen">
 
-  <div class="max-w-xl mx-auto p-5 pb-24">
-    <!-- HEADER -->
-    <div class="flex items-center justify-center gap-3 mt-8 mb-10">
-      <span class="text-4xl">🌟</span>
-      <h1 class="text-4xl font-bold tracking-tighter neon-text">CEK REKENING MP1</h1>
-      <span class="text-4xl">🌟</span>
-    </div>
-    <p class="text-center text-gray-400 mb-8 text-lg">Cek nama pemilik rekening & e-wallet<br>akurat • instan • terpercaya</p>
+  <div class="max-w-md mx-auto p-4">
 
-    <!-- MENU AWAL -->
-    <div id="mainMenu" class="space-y-4">
+    <!-- HEADER COMPACT -->
+    <div class="flex items-center justify-center gap-2 mt-3 mb-6">
+      <span class="text-3xl">🌟</span>
+      <h1 class="text-3xl font-bold tracking-[-1px] neon">CEK REKENING MP1</h1>
+      <span class="text-3xl">🌟</span>
+    </div>
+    <p class="text-center text-gray-400 text-sm mb-8 leading-tight">
+      Cek nama pemilik rekening &amp; e-wallet<br>
+      akurat • instan • terpercaya
+    </p>
+
+    <!-- MENU UTAMA -->
+    <div id="mainMenu" class="space-y-3">
       <button onclick="pilihTipe('bank')" 
-              class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#111] hover:from-[#00ff00] hover:to-[#00cc00] hover:text-black p-6 rounded-3xl flex items-center gap-5 text-left transition-all duration-300">
-        <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center text-4xl">🏦</div>
-        <div>
-          <div class="text-2xl font-semibold">Cek Bank</div>
-          <div class="text-green-400 text-sm">BCA • BRI • Mandiri • dan 15 bank lainnya</div>
+              class="w-full bg-[#111] hover:bg-[#1a1a1a] active:scale-95 transition-all p-5 rounded-3xl flex items-center gap-4">
+        <div class="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">🏦</div>
+        <div class="text-left">
+          <div class="text-xl font-semibold">Cek Bank</div>
+          <div class="text-green-400 text-xs">BCA • BRI • Mandiri • dan 15 lainnya</div>
         </div>
       </button>
 
       <button onclick="pilihTipe('wallet')" 
-              class="w-full bg-gradient-to-r from-[#1a1a1a] to-[#111] hover:from-[#00ff00] hover:to-[#00cc00] hover:text-black p-6 rounded-3xl flex items-center gap-5 text-left transition-all duration-300">
-        <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center text-4xl">📱</div>
-        <div>
-          <div class="text-2xl font-semibold">Cek E-Wallet</div>
-          <div class="text-green-400 text-sm">DANA • OVO • GoPay • ShopeePay • dll</div>
+              class="w-full bg-[#111] hover:bg-[#1a1a1a] active:scale-95 transition-all p-5 rounded-3xl flex items-center gap-4">
+        <div class="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center text-3xl flex-shrink-0">📱</div>
+        <div class="text-left">
+          <div class="text-xl font-semibold">Cek E-Wallet</div>
+          <div class="text-green-400 text-xs">DANA • OVO • GoPay • ShopeePay • dll</div>
         </div>
       </button>
     </div>
 
-    <!-- SELECTION SCREEN -->
+    <!-- SELECTION -->
     <div id="selectionScreen" class="hidden">
-      <div class="flex items-center justify-between mb-6">
-        <button onclick="backToMain()" class="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
-          ← Kembali
-        </button>
-        <h2 id="selectionTitle" class="text-2xl font-bold"></h2>
+      <div class="flex items-center justify-between mb-4">
+        <button onclick="backToMain()" class="text-green-400 text-sm flex items-center gap-1">← Kembali</button>
+        <h2 id="selectionTitle" class="text-xl font-bold"></h2>
       </div>
       <div id="gridContainer" class="grid gap-3"></div>
     </div>
 
-    <!-- INPUT SCREEN -->
+    <!-- INPUT -->
     <div id="inputScreen" class="hidden">
-      <div class="flex items-center justify-between mb-6">
-        <button onclick="backToSelection()" class="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
-          ← Kembali
-        </button>
-        <div id="selectedName" class="font-semibold text-xl"></div>
+      <div class="flex justify-between items-center mb-4">
+        <button onclick="backToSelection()" class="text-green-400 text-sm flex items-center gap-1">← Kembali</button>
+        <div id="selectedName" class="font-semibold text-lg"></div>
       </div>
-
-      <div class="bg-[#111] rounded-3xl p-6">
-        <input id="nomorInput" type="tel" maxlength="20"
-               class="w-full bg-transparent text-2xl placeholder:text-gray-500 focus:outline-none text-center py-4"
-               placeholder="Masukkan nomor rekening / HP">
-      </div>
-
+      <input id="nomorInput" type="tel" maxlength="20" 
+             class="w-full bg-[#111] text-center text-2xl py-5 rounded-3xl focus:outline-none placeholder:text-gray-500"
+             placeholder="Masukkan nomor rekening / HP">
+      
       <button onclick="cekRekening()" 
-              class="mt-8 w-full bg-green-500 hover:bg-green-400 active:scale-95 transition-all text-black font-bold text-xl py-5 rounded-3xl flex items-center justify-center gap-2 shadow-lg shadow-green-500/50">
-        <span>✅ CEK SEKARANG</span>
+              class="mt-8 w-full bg-green-500 hover:bg-green-400 text-black font-bold text-xl py-5 rounded-3xl active:scale-95 transition-all">
+        ✅ CEK SEKARANG
       </button>
     </div>
 
     <!-- RESULT -->
     <div id="resultScreen" class="hidden">
-      <div id="resultCard" class="bg-[#111] rounded-3xl p-8 text-center mt-4"></div>
+      <div id="resultCard" class="bg-[#111] rounded-3xl p-6 text-center"></div>
       
-      <div class="flex gap-4 mt-6">
-        <button onclick="cekLagi()" 
-                class="flex-1 bg-[#222] hover:bg-[#333] py-5 rounded-3xl font-semibold">🔄 Cek Lagi</button>
-        <button onclick="backToMain()" 
-                class="flex-1 bg-green-500 hover:bg-green-400 text-black py-5 rounded-3xl font-semibold">🏠 Menu Utama</button>
+      <div class="flex gap-3 mt-6">
+        <button onclick="cekLagi()" class="flex-1 bg-[#222] py-4 rounded-3xl font-medium">🔄 Cek Lagi</button>
+        <button onclick="backToMain()" class="flex-1 bg-green-500 text-black py-4 rounded-3xl font-medium">🏠 Menu Utama</button>
       </div>
     </div>
   </div>
 
   <script>
     const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
-    let isBank = true;
-    let kodeTerpilih = "";
-    let namaTerpilih = "";
+    let isBank = true, kodeTerpilih = "", namaTerpilih = "";
 
     const BANKS = { /* sama seperti sebelumnya */ 
-      'BCA': 'bank_bca', 'BNI': 'bank_bni', 'BRI': 'bank_bri', 'MANDIRI': 'bank_mandiri',
-      'BSI': 'bank_bsm', 'PERMATA': 'bank_permata', 'CIMB': 'bank_cimb', 'BTN': 'bank_btn',
-      'DANAMON': 'bank_danamon', 'JAGO': 'bank_artos', 'SEABANK': 'bank_kesejahteraan_ekonomi',
-      'BLU': 'bank_royal', 'JENIUS': 'bank_tabungan_pensiunan_nasional', 'MEGA': 'bank_mega',
-      'MAYBANK': 'bank_bii', 'PANIN': 'bank_panin', 'SINARMAS': 'bank_sinarmas'
+      'BCA': 'bank_bca','BNI': 'bank_bni','BRI': 'bank_bri','MANDIRI': 'bank_mandiri',
+      'BSI': 'bank_bsm','PERMATA': 'bank_permata','CIMB': 'bank_cimb','BTN': 'bank_btn',
+      'DANAMON': 'bank_danamon','JAGO': 'bank_artos','SEABANK': 'bank_kesejahteraan_ekonomi',
+      'BLU': 'bank_royal','JENIUS': 'bank_tabungan_pensiunan_nasional','MEGA': 'bank_mega',
+      'MAYBANK': 'bank_bii','PANIN': 'bank_panin','SINARMAS': 'bank_sinarmas'
     };
 
     const WALLETS = {
-      'DANA': 'wallet_dana', 'OVO': 'wallet_ovo', 'GOPAY': 'gopay_user',
-      'SHOPEEPAY': 'wallet_shopeepay', 'LINK AJA': 'wallet_linkaja',
-      'I.SAKU': 'wallet_isaku', 'AstraPay': 'wallet_astrapay', 'QRIS': 'qris'
+      'DANA': 'wallet_dana','OVO': 'wallet_ovo','GOPAY': 'gopay_user',
+      'SHOPEEPAY': 'wallet_shopeepay','LINK AJA': 'wallet_linkaja',
+      'I.SAKU': 'wallet_isaku','AstraPay': 'wallet_astrapay','QRIS': 'qris'
     };
 
-    function initTelegram() {
+    function init() {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
       window.Telegram.WebApp.setHeaderColor("#0a0a0a");
-    }
-
-    function tailwindConfig() {
-      tailwind.config = {
-        content: [],
-        theme: { extend: {} }
-      };
+      window.Telegram.WebApp.setBackgroundColor("#0a0a0a");
     }
 
     function pilihTipe(tipe) {
@@ -129,33 +114,23 @@
       document.getElementById('mainMenu').classList.add('hidden');
       document.getElementById('selectionScreen').classList.remove('hidden');
       
-      document.getElementById('selectionTitle').innerHTML = isBank 
-        ? '🏦 Pilih Bank' 
-        : '📱 Pilih E-Wallet';
+      document.getElementById('selectionTitle').innerHTML = isBank ? '🏦 Pilih Bank' : '📱 Pilih E-Wallet';
 
       const container = document.getElementById('gridContainer');
       container.innerHTML = '';
       container.className = isBank ? 'grid grid-cols-3 gap-3' : 'grid grid-cols-2 gap-3';
 
       const data = isBank ? BANKS : WALLETS;
-
       Object.keys(data).forEach(key => {
-        const card = document.createElement('div');
-        card.className = `bg-[#111] rounded-2xl p-4 text-center card-hover cursor-pointer`;
-        card.innerHTML = `
-          <div class="text-5xl mb-3">${isBank ? '🏦' : '📱'}</div>
-          <div class="font-semibold">${key}</div>
-        `;
-        card.onclick = () => {
-          kodeTerpilih = data[key];
-          namaTerpilih = key;
-          showInputScreen();
-        };
-        container.appendChild(card);
+        const div = document.createElement('div');
+        div.className = `bg-[#111] rounded-2xl p-4 text-center cursor-pointer hover:bg-[#1a1a1a] active:scale-95 transition-all`;
+        div.innerHTML = `<div class="text-4xl mb-1">${isBank ? '🏦' : '📱'}</div><div class="text-sm font-medium">${key}</div>`;
+        div.onclick = () => { kodeTerpilih = data[key]; namaTerpilih = key; showInput(); };
+        container.appendChild(div);
       });
     }
 
-    function showInputScreen() {
+    function showInput() {
       document.getElementById('selectionScreen').classList.add('hidden');
       document.getElementById('inputScreen').classList.remove('hidden');
       document.getElementById('selectedName').textContent = namaTerpilih;
@@ -176,73 +151,43 @@
 
     async function cekRekening() {
       const nomor = document.getElementById('nomorInput').value.trim();
-      if (!nomor) {
-        alert("Masukkan nomor dulu bro 🔥");
-        return;
-      }
+      if (!nomor) return alert("Masukkan nomor dulu bro!");
 
       document.getElementById('inputScreen').classList.add('hidden');
       document.getElementById('resultScreen').classList.remove('hidden');
 
       const card = document.getElementById('resultCard');
-      card.innerHTML = `
-        <div class="flex justify-center items-center py-12">
-          <div class="animate-spin rounded-full h-16 w-16 border-4 border-green-500 border-t-transparent"></div>
-        </div>
-        <p class="text-center text-gray-400 mt-4">Sedang mengecek...</p>
-      `;
+      card.innerHTML = `<div class="py-12 flex justify-center"><div class="animate-spin h-12 w-12 border-4 border-green-500 border-t-transparent rounded-full"></div></div>`;
 
+      // ... (fetch logic sama seperti sebelumnya, aku tetap pakai kode lama yang sudah benar)
       const url = isBank ? "https://rfpdev.xyz/api/check-rekening" : "https://rfpdev.xyz/api/check-ewallet";
       const payload = {
         api_key: API_KEY,
         [isBank ? 'bank_code' : 'ewallet_code']: kodeTerpilih,
-        [isBank ? 'account_number' : 'phone_number']: nomor.replace(/[^0-9]/g, '')
+        [isBank ? 'account_number' : 'phone_number']: nomor.replace(/[^0-9]/g,'')
       };
 
       try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(payload)
-        });
+        const res = await fetch(url, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(payload)});
         const data = await res.json();
 
         if (data.status === 'success') {
-          const namaPemilik = data.data?.customer_name || 'Tidak terdeteksi';
+          const nama = data.data?.customer_name || 'Tidak terdeteksi';
           card.innerHTML = `
-            <div class="text-7xl mb-6">✅</div>
-            <h3 class="text-green-400 text-2xl font-bold mb-4">VERIFIKASI BERHASIL</h3>
-            <div class="space-y-6 text-left">
-              <div><span class="text-gray-400">Jenis Akun</span><br><span class="font-semibold text-xl">${namaTerpilih}</span></div>
-              <div><span class="text-gray-400">Nomor</span><br><span class="font-mono text-xl">${nomor}</span></div>
-              <div><span class="text-gray-400">Nama Pemilik</span><br>
-                <span class="font-semibold text-2xl text-green-300">${namaPemilik}</span>
-              </div>
+            <div class="text-6xl mb-4">✅</div>
+            <h3 class="text-green-400 font-bold text-xl mb-6">VERIFIKASI BERHASIL</h3>
+            <div class="text-left space-y-4 text-sm">
+              <div>Jenis Akun <span class="block font-semibold">${namaTerpilih}</span></div>
+              <div>Nomor <span class="block font-mono">${nomor}</span></div>
+              <div>Nama Pemilik <span class="block font-semibold text-green-300">${nama}</span></div>
             </div>
-            <button onclick="copyNama('${namaPemilik}')" 
-                    class="mt-8 w-full bg-[#222] py-4 rounded-2xl text-sm font-medium">📋 Salin Nama Pemilik</button>
           `;
         } else {
-          card.innerHTML = `
-            <div class="text-7xl mb-6">❌</div>
-            <p class="text-red-400 text-xl font-semibold">${data.message || 'Data tidak ditemukan'}</p>
-          `;
+          card.innerHTML = `<div class="text-6xl mb-4">❌</div><p class="text-red-400">${data.message || 'Data tidak ditemukan'}</p>`;
         }
-      } catch (e) {
-        card.innerHTML = `
-          <div class="text-7xl mb-6">⚠️</div>
-          <p class="text-gray-400">Koneksi bermasalah, coba lagi nanti</p>
-        `;
+      } catch(e) {
+        card.innerHTML = `<div class="text-6xl mb-4">⚠️</div><p class="text-gray-400">Koneksi error, coba lagi</p>`;
       }
-    }
-
-    function copyNama(nama) {
-      navigator.clipboard.writeText(nama).then(() => {
-        const btn = event.target;
-        const original = btn.textContent;
-        btn.textContent = "✅ Berhasil disalin!";
-        setTimeout(() => btn.textContent = original, 2000);
-      });
     }
 
     function cekLagi() {
@@ -251,9 +196,7 @@
       document.getElementById('nomorInput').value = '';
     }
 
-    // INIT
-    initTelegram();
-    tailwindConfig();
+    init();
   </script>
 </body>
 </html>
