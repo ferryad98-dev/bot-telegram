@@ -9,7 +9,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0d0f14;
+      --bg: #0a0c10;
       --surface: #141720;
       --surface2: #1c2030;
       --border: #252a3a;
@@ -20,7 +20,7 @@
       --sans: 'Sora', sans-serif;
     }
     body { 
-      background: var(--bg); 
+      background: #0a0c10; 
       color: var(--text); 
       font-family: var(--sans); 
       min-height: 100vh; 
@@ -29,52 +29,18 @@
       overflow-x: hidden; 
     }
 
-    /* === ANIMASI BACKGROUND NEON === */
-    body::before {
-      content: '';
+    /* Canvas Matrix Rain */
+    #matrix-canvas {
       position: fixed;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(0,255,136,0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,136,0.08) 1px, transparent 1px);
-      background-size: 50px 50px;
-      pointer-events: none;
-      animation: gridMove 15s linear infinite;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
       z-index: -1;
+      opacity: 0.85;
     }
 
-    /* Garis diagonal neon yang bergerak */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(45deg, transparent 40%, rgba(0,255,136,0.15) 50%, transparent 60%);
-      background-size: 300% 300%;
-      pointer-events: none;
-      animation: diagonalScan 12s linear infinite;
-      opacity: 0.6;
-      z-index: -1;
-    }
-
-    @keyframes gridMove {
-      0% { background-position: 0 0; }
-      100% { background-position: 50px 50px; }
-    }
-
-    @keyframes diagonalScan {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 300% 300%; }
-    }
-
-    .wrapper { width: 100%; max-width: 420px; margin: 0 auto; }
-    .header { text-align: center; margin-bottom: 1.8rem; position: relative; }
-    
-    .theme-toggle {
-      position: absolute; top: 5px; right: 5px;
-      background: none; border: none; font-size: 1.5rem; cursor: pointer;
-      padding: 8px; border-radius: 50%; width: 44px; height: 44px;
-    }
-
+    .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
+    .header { text-align: center; margin-bottom: 1.8rem; }
     .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.6); border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700; color: var(--accent); animation: badgeFlicker 2s infinite alternate; }
     @keyframes badgeFlicker { 0% { text-shadow: 0 0 8px var(--accent); } 100% { text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); } }
 
@@ -118,169 +84,206 @@
   </style>
 </head>
 <body>
-<div class="wrapper">
-  <div class="header">
-    <div class="badge">● SECURITY VERIFIED ●</div>
-    <h1>Cek <span>Rekening</span> &amp;<br/>E-Wallet</h1>
-    <p>Pastikan isi dengan benar yaa</p>
-  </div>
+  <canvas id="matrix-canvas"></canvas>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('bank')">🏦 Bank</button>
-    <button class="tab-btn" onclick="switchTab('ewallet')">📱 E-Wallet</button>
-  </div>
-
-  <!-- BANK PANEL -->
-  <div class="panel active" id="panel-bank">
-    <div class="card">
-      <div class="field"><label>Pilih Bank</label>
-        <select id="bank-select"><option value="">-- Pilih Bank --</option>
-          <option value="bank_bca">BCA</option><option value="bank_bni">BNI</option><option value="bank_bri">BRI</option>
-          <option value="bank_mandiri">MANDIRI</option><option value="bank_bsm">BSI</option><option value="bank_permata">PERMATA</option>
-          <option value="bank_cimb">CIMB</option><option value="bank_btn">BTN</option><option value="bank_danamon">DANAMON</option>
-          <option value="bank_artos">JAGO</option><option value="bank_kesejahteraan_ekonomi">SEABANK</option>
-          <option value="bank_royal">BLU</option><option value="bank_tabungan_pensiunan_nasional">JENIUS</option>
-          <option value="bank_mega">MEGA</option><option value="bank_bii">MAYBANK</option>
-          <option value="bank_panin">PANIN</option><option value="bank_sinarmas">SINARMAS</option>
-        </select>
-      </div>
-      <div class="field"><label>Nomor Rekening</label>
-        <input type="text" id="bank-number" placeholder="Contoh: 12345678" inputmode="numeric" />
-      </div>
-      <button class="btn" id="btn-bank" onclick="checkBank()">
-        🔍 <span id="btn-bank-text">Cek Rekening</span>
-      </button>
+  <div class="wrapper">
+    <div class="header">
+      <div class="badge">● SECURITY VERIFIED ●</div>
+      <h1>Cek <span>Rekening</span> &amp;<br/>E-Wallet</h1>
+      <p>Pastikan isi dengan benar yaa</p>
     </div>
-    <div class="result" id="result-bank"></div>
-  </div>
 
-  <!-- E-WALLET PANEL -->
-  <div class="panel" id="panel-ewallet">
-    <div class="card">
-      <div class="field"><label>Pilih E-Wallet</label>
-        <select id="ew-select"><option value="">-- Pilih E-Wallet --</option>
-          <option value="wallet_dana">DANA</option><option value="wallet_ovo">OVO</option><option value="gopay_user">GOPAY</option>
-          <option value="wallet_shopeepay">SHOPEEPAY</option><option value="wallet_linkaja">LINK AJA</option>
-          <option value="wallet_isaku">I.SAKU</option><option value="wallet_astrapay">AstraPay</option><option value="qris">QRIS</option>
-        </select>
-      </div>
-      <div class="field"><label>Nomor HP</label>
-        <input type="text" id="ew-number" placeholder="Contoh: 0812345678" inputmode="numeric" />
-      </div>
-      <button class="btn" id="btn-ew" onclick="checkEwallet()">
-        🔍 <span id="btn-ew-text">Cek E-Wallet</span>
-      </button>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('bank')">🏦 Bank</button>
+      <button class="tab-btn" onclick="switchTab('ewallet')">📱 E-Wallet</button>
     </div>
-    <div class="result" id="result-ew"></div>
+
+    <!-- BANK PANEL -->
+    <div class="panel active" id="panel-bank">
+      <div class="card">
+        <div class="field"><label>Pilih Bank</label>
+          <select id="bank-select"><option value="">-- Pilih Bank --</option>
+            <option value="bank_bca">BCA</option><option value="bank_bni">BNI</option><option value="bank_bri">BRI</option>
+            <option value="bank_mandiri">MANDIRI</option><option value="bank_bsm">BSI</option><option value="bank_permata">PERMATA</option>
+            <option value="bank_cimb">CIMB</option><option value="bank_btn">BTN</option><option value="bank_danamon">DANAMON</option>
+            <option value="bank_artos">JAGO</option><option value="bank_kesejahteraan_ekonomi">SEABANK</option>
+            <option value="bank_royal">BLU</option><option value="bank_tabungan_pensiunan_nasional">JENIUS</option>
+            <option value="bank_mega">MEGA</option><option value="bank_bii">MAYBANK</option>
+            <option value="bank_panin">PANIN</option><option value="bank_sinarmas">SINARMAS</option>
+          </select>
+        </div>
+        <div class="field"><label>Nomor Rekening</label>
+          <input type="text" id="bank-number" placeholder="Contoh: 12345678" inputmode="numeric" />
+        </div>
+        <button class="btn" id="btn-bank" onclick="checkBank()">
+          🔍 <span id="btn-bank-text">Cek Rekening</span>
+        </button>
+      </div>
+      <div class="result" id="result-bank"></div>
+    </div>
+
+    <!-- E-WALLET PANEL -->
+    <div class="panel" id="panel-ewallet">
+      <div class="card">
+        <div class="field"><label>Pilih E-Wallet</label>
+          <select id="ew-select"><option value="">-- Pilih E-Wallet --</option>
+            <option value="wallet_dana">DANA</option><option value="wallet_ovo">OVO</option><option value="gopay_user">GOPAY</option>
+            <option value="wallet_shopeepay">SHOPEEPAY</option><option value="wallet_linkaja">LINK AJA</option>
+            <option value="wallet_isaku">I.SAKU</option><option value="wallet_astrapay">AstraPay</option><option value="qris">QRIS</option>
+          </select>
+        </div>
+        <div class="field"><label>Nomor HP</label>
+          <input type="text" id="ew-number" placeholder="Contoh: 0812345678" inputmode="numeric" />
+        </div>
+        <button class="btn" id="btn-ew" onclick="checkEwallet()">
+          🔍 <span id="btn-ew-text">Cek E-Wallet</span>
+        </button>
+      </div>
+      <div class="result" id="result-ew"></div>
+    </div>
+
+    <p class="footer-note">Data real-time dari sistem perbankan Indonesia</p>
+    <p class="footer-note">By @PelerMonyetProject</p>
   </div>
 
-  <p class="footer-note">Data real-time dari sistem perbankan Indonesia</p>
-  <p class="footer-note">By @PelerMonyetProject</p>
-</div>
+  <script>
+    const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
 
-<script>
-  const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
+    // ==================== MATRIX RAIN HACKER BACKGROUND ====================
+    const canvas = document.getElementById('matrix-canvas');
+    const ctx = canvas.getContext('2d');
 
-  function initTelegram() {
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
-    Telegram.WebApp.setHeaderColor("#0d0f14");
-    Telegram.WebApp.setBackgroundColor("#0d0f14");
-  }
-
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    if (tab === 'bank') document.querySelector('.tab-btn:first-child').classList.add('active');
-    else document.querySelector('.tab-btn:last-child').classList.add('active');
-    document.getElementById('panel-bank').classList.toggle('active', tab === 'bank');
-    document.getElementById('panel-ewallet').classList.toggle('active', tab === 'ewallet');
-  }
-
-  function setLoading(btnId, loading, type = '') {
-    const btn = document.getElementById(btnId);
-    const text = document.getElementById(btnId + '-text');
-    btn.disabled = loading;
-    btn.classList.toggle('loading', loading);
-    if (loading) {
-      text.innerHTML = `<span class="spinner"></span> Sedang mengecek ${type}...`;
-    } else {
-      text.innerHTML = type === 'bank' ? 'Cek Rekening' : 'Cek E-Wallet';
+    function resizeCanvas() {
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
     }
-  }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-  async function checkBank() {
-    const bankCode = document.getElementById('bank-select').value;
-    const number = document.getElementById('bank-number').value.trim();
-    if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
-    setLoading('btn-bank', true, 'rekening');
-    const resultEl = document.getElementById('result-bank');
-    try {
-      const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
-      });
-      const json = await res.json();
-      if (json.status === 'success') {
-        const nama = json.data?.customer_name || 'Tidak terdeteksi';
-        resultEl.className = 'result show success';
-        resultEl.innerHTML = `
-          <div class="result-header">✅ VERIFIKASI BERHASIL</div>
-          <div class="result-body">
-            <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">Bank</span></div>
-            <div style="margin:12px 0"><strong>Nomor Rekening</strong><br><span style="font-family:monospace">${number}</span></div>
-            <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
-            <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-          </div>`;
-      } else {
-        resultEl.className = 'result show error';
-        resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+    const chars = "01アイウエオ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*()";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(10, 12, 16, 0.08)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff88';
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
       }
-    } catch (e) {
-      resultEl.className = 'result show error';
-      resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
-    } finally {
-      setLoading('btn-bank', false);
     }
-  }
+    setInterval(drawMatrix, 35);
 
-  async function checkEwallet() {
-    const walletCode = document.getElementById('ew-select').value;
-    const number = document.getElementById('ew-number').value.trim();
-    if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
-    setLoading('btn-ew', true, 'e-wallet');
-    const resultEl = document.getElementById('result-ew');
-    try {
-      const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
-      });
-      const json = await res.json();
-      if (json.status === 'success') {
-        const nama = json.data?.customer_name || 'Tidak terdeteksi';
-        resultEl.className = 'result show success';
-        resultEl.innerHTML = `
-          <div class="result-header">✅ VERIFIKASI BERHASIL</div>
-          <div class="result-body">
-            <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">E-Wallet</span></div>
-            <div style="margin:12px 0"><strong>Nomor HP</strong><br><span style="font-family:monospace">${number}</span></div>
-            <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
-            <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-          </div>`;
+    // ==================== SCRIPT ASLI KAMU (TIDAK DIUBAH) ====================
+    function initTelegram() {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
+      Telegram.WebApp.setHeaderColor("#0d0f14");
+      Telegram.WebApp.setBackgroundColor("#0d0f14");
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      if (tab === 'bank') document.querySelector('.tab-btn:first-child').classList.add('active');
+      else document.querySelector('.tab-btn:last-child').classList.add('active');
+      document.getElementById('panel-bank').classList.toggle('active', tab === 'bank');
+      document.getElementById('panel-ewallet').classList.toggle('active', tab === 'ewallet');
+    }
+
+    function setLoading(btnId, loading, type = '') {
+      const btn = document.getElementById(btnId);
+      const text = document.getElementById(btnId + '-text');
+      btn.disabled = loading;
+      btn.classList.toggle('loading', loading);
+      if (loading) {
+        text.innerHTML = `<span class="spinner"></span> Sedang mengecek ${type}...`;
       } else {
-        resultEl.className = 'result show error';
-        resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+        text.innerHTML = type === 'bank' ? 'Cek Rekening' : 'Cek E-Wallet';
       }
-    } catch (e) {
-      resultEl.className = 'result show error';
-      resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
-    } finally {
-      setLoading('btn-ew', false);
     }
-  }
 
-  initTelegram();
-</script>
+    async function checkBank() {
+      const bankCode = document.getElementById('bank-select').value;
+      const number = document.getElementById('bank-number').value.trim();
+      if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
+      setLoading('btn-bank', true, 'rekening');
+      const resultEl = document.getElementById('result-bank');
+      try {
+        const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          const nama = json.data?.customer_name || 'Tidak terdeteksi';
+          resultEl.className = 'result show success';
+          resultEl.innerHTML = `
+            <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+            <div class="result-body">
+              <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">Bank</span></div>
+              <div style="margin:12px 0"><strong>Nomor Rekening</strong><br><span style="font-family:monospace">${number}</span></div>
+              <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
+              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+            </div>`;
+        } else {
+          resultEl.className = 'result show error';
+          resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+        }
+      } catch (e) {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+      } finally {
+        setLoading('btn-bank', false);
+      }
+    }
+
+    async function checkEwallet() {
+      const walletCode = document.getElementById('ew-select').value;
+      const number = document.getElementById('ew-number').value.trim();
+      if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
+      setLoading('btn-ew', true, 'e-wallet');
+      const resultEl = document.getElementById('result-ew');
+      try {
+        const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          const nama = json.data?.customer_name || 'Tidak terdeteksi';
+          resultEl.className = 'result show success';
+          resultEl.innerHTML = `
+            <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+            <div class="result-body">
+              <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">E-Wallet</span></div>
+              <div style="margin:12px 0"><strong>Nomor HP</strong><br><span style="font-family:monospace">${number}</span></div>
+              <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
+              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+            </div>`;
+        } else {
+          resultEl.className = 'result show error';
+          resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+        }
+      } catch (e) {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+      } finally {
+        setLoading('btn-ew', false);
+      }
+    }
+
+    initTelegram();
+  </script>
 </body>
 </html>
