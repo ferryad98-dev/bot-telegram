@@ -58,19 +58,19 @@
     .btn:hover { box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent); transform: scale(1.03); }
     .btn.loading { animation: btnLoadingPulse 1.5s ease-in-out infinite alternate; }
 
-    /* ==================== ANIMASI LOADING NEON ==================== */
+    /* ==================== ANIMASI LOADING NEON KEREN ==================== */
     .spinner {
-      width: 24px; height: 24px;
-      border: 4px solid rgba(0,255,136,0.3);
+      width: 26px; height: 26px;
+      border: 4px solid rgba(0,255,136,0.25);
       border-top-color: #00ff88;
       border-radius: 50%;
       animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate;
-      box-shadow: 0 0 20px #00ff88, 0 0 35px #00ff88;
+      box-shadow: 0 0 20px #00ff88, 0 0 35px #00ff88, 0 0 50px #00ff88;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes neonLoadingPulse {
-      0% { box-shadow: 0 0 15px #00ff88; }
-      100% { box-shadow: 0 0 35px #00ff88, 0 0 55px #00ff88; }
+      0% { box-shadow: 0 0 15px #00ff88, 0 0 25px #00ff88; }
+      100% { box-shadow: 0 0 35px #00ff88, 0 0 55px #00ff88, 0 0 70px #00ff88; }
     }
 
     .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
