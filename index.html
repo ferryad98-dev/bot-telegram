@@ -32,22 +32,43 @@
     body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
 
     /* MATRIX RAIN OPTIMIZED */
-    #matrix-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      opacity: 0.75;
-    }
+    #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.75; }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
-    .header { text-align: center; margin-bottom: 1.8rem; position: relative; }
+    .header { text-align: center; margin-bottom: 1.5rem; position: relative; }
 
     .theme-toggle {
       position: absolute; top: 8px; right: 8px;
       background: none; border: none; font-size: 1.6rem; cursor: pointer;
       padding: 8px; border-radius: 50%; width: 48px; height: 48px;
-      z-index: 10;
+    }
+
+    /* RUNNING LOGOS */
+    .running-logos {
+      margin: 20px 0 25px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+    .running-logos::before, .running-logos::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2; pointer-events: none;
+    }
+    .running-logos::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+    .running-logos::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+
+    .logos-container {
+      display: inline-flex;
+      animation: marquee 28s linear infinite;
+    }
+    .logos-container img {
+      height: 42px;
+      margin: 0 18px;
+      filter: brightness(1.1) drop-shadow(0 0 8px #00ff88);
+      opacity: 0.9;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
     }
 
     .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.6); border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700; color: var(--accent); animation: badgeFlicker 2s infinite alternate; }
@@ -97,12 +118,17 @@
 
   <div class="wrapper">
     <div class="header">
-      <!-- TOGGLE MODE -->
+      <!-- TOGGLE DARK/LIGHT -->
       <button onclick="toggleTheme()" class="theme-toggle" id="theme-toggle">🌙</button>
 
       <div class="badge">● SECURITY VERIFIED ●</div>
       <h1>Cek <span>Rekening</span> &amp;<br/>E-Wallet</h1>
       <p>Pastikan isi dengan benar yaa</p>
+
+      <!-- RUNNING LOGOS -->
+      <div class="running-logos">
+        <div class="logos-container" id="logos-container"></div>
+      </div>
     </div>
 
     <div class="tabs">
@@ -161,7 +187,7 @@
   <script>
     const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
 
-    // ==================== OPTIMIZED MATRIX RAIN ====================
+    // ==================== MATRIX RAIN ====================
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let fontSize = 13;
@@ -178,13 +204,11 @@
     resizeCanvas();
 
     const chars = "01アイウエオ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*";
-
     function drawMatrix() {
       ctx.fillStyle = 'rgba(10, 12, 16, 0.12)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#00ff88';
       ctx.font = `${fontSize}px monospace`;
-
       for (let i = 0; i < drops.length; i++) {
         const text = chars[Math.floor(Math.random() * chars.length)];
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -192,12 +216,47 @@
         drops[i]++;
       }
     }
-
     function animate() {
       drawMatrix();
       requestAnimationFrame(animate);
     }
     animate();
+
+    // ==================== RUNNING LOGOS ====================
+    const logos = [
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/bca.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/bni.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/bri.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/bsi.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/cimb.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/dana.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/danamon.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/gopay.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/jago.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/jenius.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/linkaja.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/mandiri.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/maybank.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/mega.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/ocbc.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/ovo.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/panin.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/permata.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/sakuku.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/seabank.png",
+      "https://obvcn10455.p0ker88wins.org/assets/img/ptpk/bank/sinarmas.png"
+    ];
+
+    function createRunningLogos() {
+      const container = document.getElementById('logos-container');
+      const allLogos = [...logos, ...logos];
+      allLogos.forEach(src => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = "bank logo";
+        container.appendChild(img);
+      });
+    }
 
     // ==================== THEME TOGGLE ====================
     function toggleTheme() {
@@ -316,7 +375,9 @@
       }
     }
 
+    // INIT
     initTelegram();
+    createRunningLogos();
     loadTheme();
   </script>
 </body>
