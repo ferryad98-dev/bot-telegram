@@ -19,24 +19,15 @@
       --mono: 'DM Mono', monospace;
       --sans: 'Sora', sans-serif;
     }
-    body { 
-      background: #0a0c10; 
-      color: var(--text); 
-      font-family: var(--sans); 
-      min-height: 100vh; 
-      padding: 1rem; 
-      position: relative; 
-      overflow-x: hidden; 
-    }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
 
-    /* Canvas Matrix Rain */
+    /* MATRIX RAIN OPTIMIZED */
     #matrix-canvas {
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       z-index: -1;
-      opacity: 0.85;
+      opacity: 0.75;
     }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
@@ -149,25 +140,30 @@
   <script>
     const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
 
-    // ==================== MATRIX RAIN HACKER BACKGROUND ====================
+    // ==================== OPTIMIZED MATRIX RAIN ====================
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
+
+    let fontSize = 13;
+    let columns;
+    let drops = [];
 
     function resizeCanvas() {
       canvas.height = window.innerHeight;
       canvas.width = window.innerWidth;
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
     }
+
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    const chars = "01アイウエオ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%^&*()";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
+    const chars = "01アイウエオ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*";
 
     function drawMatrix() {
-      ctx.fillStyle = 'rgba(10, 12, 16, 0.08)';
+      ctx.fillStyle = 'rgba(10, 12, 16, 0.12)';   // fade lebih ringan
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       ctx.fillStyle = '#00ff88';
       ctx.font = `${fontSize}px monospace`;
 
@@ -181,7 +177,13 @@
         drops[i]++;
       }
     }
-    setInterval(drawMatrix, 35);
+
+    // Jalankan dengan requestAnimationFrame (lebih efisien)
+    function animate() {
+      drawMatrix();
+      requestAnimationFrame(animate);
+    }
+    animate();
 
     // ==================== SCRIPT ASLI KAMU (TIDAK DIUBAH) ====================
     function initTelegram() {
