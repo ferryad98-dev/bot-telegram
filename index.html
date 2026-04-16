@@ -31,7 +31,7 @@
 
     body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
 
-    /* MATRIX RAIN OPTIMIZED */
+    /* MATRIX RAIN */
     #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.75; }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
@@ -88,7 +88,11 @@
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.8rem; }
     .field { margin-bottom: 1.4rem; }
     label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
-    select, input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; color: var(--text); font-family: var(--mono); font-size: 1rem; outline: none; }
+    select, input { 
+      width: 100%; background: var(--surface2); border: 1px solid var(--border); 
+      border-radius: 12px; padding: 14px 16px; color: var(--text); 
+      font-family: var(--mono); font-size: 1rem; outline: none; 
+    }
 
     .btn {
       width: 100%; padding: 15px; background: var(--accent); color: #000;
@@ -118,7 +122,6 @@
 
   <div class="wrapper">
     <div class="header">
-      <!-- TOGGLE DARK/LIGHT -->
       <button onclick="toggleTheme()" class="theme-toggle" id="theme-toggle">🌙</button>
 
       <div class="badge">● SECURITY VERIFIED ●</div>
@@ -151,7 +154,7 @@
           </select>
         </div>
         <div class="field"><label>Nomor Rekening</label>
-          <input type="text" id="bank-number" placeholder="Contoh: 12345678" inputmode="numeric" />
+          <input type="text" id="bank-number" placeholder="Contoh: 12345678" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
         <button class="btn" id="btn-bank" onclick="checkBank()">
           🔍 <span id="btn-bank-text">Cek Rekening</span>
@@ -171,7 +174,7 @@
           </select>
         </div>
         <div class="field"><label>Nomor HP</label>
-          <input type="text" id="ew-number" placeholder="Contoh: 0812345678" inputmode="numeric" />
+          <input type="text" id="ew-number" placeholder="Contoh: 0812345678" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         </div>
         <button class="btn" id="btn-ew" onclick="checkEwallet()">
           🔍 <span id="btn-ew-text">Cek E-Wallet</span>
