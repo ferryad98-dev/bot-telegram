@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>CEK REKENING</title>
+  <title>CEK REKENING MP1</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -13,7 +13,7 @@
       --surface: #141720;
       --surface2: #1c2030;
       --border: #252a3a;
-      --accent: #ff0066;           /* 🔥 MERAH NEON BARU */
+      --accent: #ff0066;           /* default merah */
       --text: #e8ecf4;
       --muted: #6b7592;
       --mono: 'DM Mono', monospace;
@@ -31,17 +31,26 @@
 
     body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
 
-    /* MATRIX RAIN - DIUBAH JADI MERAH */
+    /* MATRIX RAIN */
     #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.85; }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
     .header { text-align: center; margin-bottom: 1.5rem; position: relative; }
 
-    .theme-toggle {
-      position: absolute; top: 8px; right: 8px;
-      background: none; border: none; font-size: 1.6rem; cursor: pointer;
-      padding: 8px; border-radius: 50%; width: 48px; height: 48px;
+    .theme-toggle, .color-picker {
+      position: absolute; top: 8px; background: none; border: none; cursor: pointer;
     }
+    .theme-toggle { right: 8px; font-size: 1.6rem; padding: 8px; border-radius: 50%; width: 48px; height: 48px; }
+    .color-picker { left: 64px; display: flex; gap: 6px; }
+
+    .color-swatch {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 12px var(--accent), 0 0 0 2px #111;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .color-swatch:hover { transform: scale(1.15); border-color: #fff; }
 
     /* RUNNING LOGOS */
     .running-logos {
@@ -102,9 +111,9 @@
     }
     .btn:hover { box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent); transform: scale(1.03); }
 
-    .spinner { width: 26px; height: 26px; border: 4px solid rgba(255,0,102,0.25); border-top-color: #ff0066; border-radius: 50%; animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate; box-shadow: 0 0 20px #ff0066, 0 0 35px #ff0066, 0 0 50px #ff0066; }
+    .spinner { width: 26px; height: 26px; border: 4px solid rgba(255,0,102,0.25); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate; box-shadow: 0 0 20px var(--accent), 0 0 35px var(--accent), 0 0 50px var(--accent); }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes neonLoadingPulse { 0% { box-shadow: 0 0 15px #ff0066, 0 0 25px #ff0066; } 100% { box-shadow: 0 0 35px #ff0066, 0 0 55px #ff0066, 0 0 70px #ff0066; } }
+    @keyframes neonLoadingPulse { 0% { box-shadow: 0 0 15px var(--accent), 0 0 25px var(--accent); } 100% { box-shadow: 0 0 35px var(--accent), 0 0 55px var(--accent), 0 0 70px var(--accent); } }
 
     .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
     .result.show { display: block; animation: resultGlow 2s ease-in-out infinite alternate; }
@@ -156,6 +165,9 @@
 
   <div class="wrapper">
     <div class="header">
+      <!-- TOMBOL GANTI WARNA (baru) -->
+      <div class="color-picker" id="color-picker"></div>
+
       <button onclick="toggleTheme()" class="theme-toggle" id="theme-toggle">🌙</button>
 
       <div class="badge">● SECURITY VERIFIED ●</div>
@@ -224,7 +236,23 @@
   <script>
     const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
 
-    // ==================== MATRIX RAIN (MERAH NEON) ====================
+    // ==================== WARNA NEON PRESET (banyak pilihan) ====================
+    const colorPresets = [
+      { hex: "#00ff88", name: "Green" },
+      { hex: "#ff0066", name: "Red" },
+      { hex: "#00ccff", name: "Cyan" },
+      { hex: "#aa00ff", name: "Purple" },
+      { hex: "#ff00cc", name: "Pink" },
+      { hex: "#00ffff", name: "Aqua" },
+      { hex: "#ff8800", name: "Orange" },
+      { hex: "#ffee00", name: "Yellow" },
+      { hex: "#ff0088", name: "Magenta" },
+      { hex: "#33ff88", name: "Lime" }
+    ];
+
+    let currentAccent = "#ff0066";
+
+    // ==================== MATRIX RAIN (warna dinamis) ====================
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let fontSize = 13;
@@ -242,9 +270,9 @@
 
     const chars = "01アイウエオ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*";
     function drawMatrix() {
-      ctx.fillStyle = 'rgba(10, 12, 16, 0.14)';           // sedikit lebih gelap biar merah makin keluar
+      ctx.fillStyle = 'rgba(10, 12, 16, 0.14)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#ff0066';                          // 🔥 MERAH NEON
+      ctx.fillStyle = currentAccent;        // warna matrix ikut accent
       ctx.font = `${fontSize}px monospace`;
       for (let i = 0; i < drops.length; i++) {
         const text = chars[Math.floor(Math.random() * chars.length)];
@@ -258,6 +286,32 @@
       requestAnimationFrame(animate);
     }
     animate();
+
+    // ==================== CREATE COLOR PICKER ====================
+    function createColorPicker() {
+      const container = document.getElementById('color-picker');
+      colorPresets.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'color-swatch';
+        swatch.style.backgroundColor = color.hex;
+        swatch.title = color.name;
+        swatch.onclick = () => setAccent(color.hex);
+        container.appendChild(swatch);
+      });
+    }
+
+    function setAccent(hex) {
+      currentAccent = hex;
+      document.documentElement.style.setProperty('--accent', hex);
+      localStorage.setItem('accentColor', hex);
+
+      // update result success (karena pakai rgba manual)
+      const results = document.querySelectorAll('.result.success');
+      results.forEach(r => {
+        r.style.background = `rgba(${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)},0.12)`;
+        r.style.border = `1px solid rgba(${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)},0.6)`;
+      });
+    }
 
     // ==================== RUNNING LOGOS ====================
     const logos = [
@@ -304,10 +358,18 @@
     }
 
     function loadTheme() {
-      const saved = localStorage.getItem('theme');
-      if (saved) {
-        document.documentElement.setAttribute('data-theme', saved);
-        document.getElementById('theme-toggle').textContent = saved === 'light' ? '☀️' : '🌙';
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('theme-toggle').textContent = savedTheme === 'light' ? '☀️' : '🌙';
+      }
+    }
+
+    function loadAccent() {
+      const savedAccent = localStorage.getItem('accentColor');
+      if (savedAccent) {
+        currentAccent = savedAccent;
+        document.documentElement.style.setProperty('--accent', savedAccent);
       }
     }
 
@@ -444,7 +506,9 @@
     // INIT
     initTelegram();
     createRunningLogos();
+    createColorPicker();
     loadTheme();
+    loadAccent();
   </script>
 </body>
 </html>
