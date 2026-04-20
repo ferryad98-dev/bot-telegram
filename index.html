@@ -112,7 +112,41 @@
     .result-header { padding: 14px 18px; font-weight: 700; font-size: 0.85rem; border-radius: 16px 16px 0 0; text-shadow: 0 0 12px var(--accent); }
     .result.success .result-header { background: rgba(0,255,136,0.25); color: #000; }
     .result-body { padding: 1.4rem 1.6rem; }
-    .result-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); text-shadow: 0 0 15px var(--accent); }
+
+    /* === RESULT RAPI & KONSISTEN (baru) === */
+    .result-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+    .result-body .info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .result-body .label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .result-body .value {
+      font-family: var(--mono);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+    .result-body .value.accent {
+      color: #00ff88;
+    }
+    .result-body .value.name {
+      font-size: 1.72rem;
+      color: #00ff88;
+      text-shadow: 0 0 18px #00ff88;
+    }
+
     .copy-btn { margin-top: 12px; width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
     .footer-note { text-align: center; margin-top: 2rem; font-size: 0.78rem; color: var(--muted); }
   </style>
@@ -226,28 +260,28 @@
     animate();
 
     // ==================== RUNNING LOGOS ====================
-const logos = [
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202512011803369798.png?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202412252038463027.png?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202512011741078394.png?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202512011804167182.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408301641353801.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/20250430230542817.png?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/20250205183129232.png?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349366610.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349367879.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349365131.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349366783.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349365076.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349365471.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408280908305599.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349367518.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/20240827134936414.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349362828.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349368751.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271353003701.webp?v=1776425094036z435c7",
-  "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271353002618.webp?v=1776425094036z435c7"
-];
+    const logos = [
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202512011803369798.png?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202412252038463027.png?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202512011741078394.png?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202512011804167182.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408301641353801.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/20250430230542817.png?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/20250205183129232.png?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349366610.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349367879.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349365131.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349366783.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349365076.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349365471.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408280908305599.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349367518.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/20240827134936414.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349362828.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271349368751.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271353003701.webp?v=1776425094036z435c7",
+      "https://feedbet-image.idnsp.net/uploads/paymentMethod/202408271353002618.webp?v=1776425094036z435c7"
+    ];
 
     function createRunningLogos() {
       const container = document.getElementById('logos-container');
@@ -277,7 +311,7 @@ const logos = [
       }
     }
 
-    // ==================== SCRIPT ASLI KAMU (TIDAK DIUBAH) ====================
+    // ==================== SCRIPT UTAMA ====================
     function initTelegram() {
       Telegram.WebApp.ready();
       Telegram.WebApp.expand();
@@ -305,89 +339,107 @@ const logos = [
       }
     }
 
-async function checkBank() {
-  const bankSelect = document.getElementById('bank-select');
-  const bankCode = bankSelect.value;
-  const bankName = bankSelect.options[bankSelect.selectedIndex].textContent;   // ← ini yang baru
-  const number = document.getElementById('bank-number').value.trim();
-  
-  if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
-  
-  setLoading('btn-bank', true, 'rekening');
-  const resultEl = document.getElementById('result-bank');
-  
-  try {
-    const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
-    });
-    const json = await res.json();
-    
-    if (json.status === 'success') {
-      const nama = json.data?.customer_name || 'Tidak terdeteksi';
-      resultEl.className = 'result show success';
-      resultEl.innerHTML = `
-        <div class="result-header">✅ VERIFIKASI BERHASIL</div>
-        <div class="result-body">
-          <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">${bankName}</span></div>
-          <div style="margin:12px 0"><strong>Nomor Rekening</strong><br><span style="font-family:monospace">${number}</span></div>
-          <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
-          <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-        </div>`;
-    } else {
-      resultEl.className = 'result show error';
-      resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+    async function checkBank() {
+      const bankSelect = document.getElementById('bank-select');
+      const bankCode = bankSelect.value;
+      const bankName = bankSelect.options[bankSelect.selectedIndex].textContent;
+      const number = document.getElementById('bank-number').value.trim();
+      
+      if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
+      
+      setLoading('btn-bank', true, 'rekening');
+      const resultEl = document.getElementById('result-bank');
+      
+      try {
+        const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
+        });
+        const json = await res.json();
+        
+        if (json.status === 'success') {
+          const nama = json.data?.customer_name || 'Tidak terdeteksi';
+          resultEl.className = 'result show success';
+          resultEl.innerHTML = `
+            <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+            <div class="result-body">
+              <div class="info-group">
+                <div class="label">Jenis Akun</div>
+                <div class="value accent">${bankName}</div>
+              </div>
+              <div class="info-group">
+                <div class="label">Nomor Rekening</div>
+                <div class="value">${number}</div>
+              </div>
+              <div class="info-group">
+                <div class="label">Nama Pemilik</div>
+                <div class="value name">${nama}</div>
+              </div>
+              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+            </div>`;
+        } else {
+          resultEl.className = 'result show error';
+          resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+        }
+      } catch (e) {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+      } finally {
+        setLoading('btn-bank', false);
+      }
     }
-  } catch (e) {
-    resultEl.className = 'result show error';
-    resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
-  } finally {
-    setLoading('btn-bank', false);
-  }
-}
 
-async function checkEwallet() {
-  const ewSelect = document.getElementById('ew-select');
-  const walletCode = ewSelect.value;
-  const ewName = ewSelect.options[ewSelect.selectedIndex].textContent;   // ← ini yang baru
-  const number = document.getElementById('ew-number').value.trim();
-  
-  if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
-  
-  setLoading('btn-ew', true, 'e-wallet');
-  const resultEl = document.getElementById('result-ew');
-  
-  try {
-    const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
-    });
-    const json = await res.json();
-    
-    if (json.status === 'success') {
-      const nama = json.data?.customer_name || 'Tidak terdeteksi';
-      resultEl.className = 'result show success';
-      resultEl.innerHTML = `
-        <div class="result-header">✅ VERIFIKASI BERHASIL</div>
-        <div class="result-body">
-          <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">${ewName}</span></div>
-          <div style="margin:12px 0"><strong>Nomor HP</strong><br><span style="font-family:monospace">${number}</span></div>
-          <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
-          <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-        </div>`;
-    } else {
-      resultEl.className = 'result show error';
-      resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+    async function checkEwallet() {
+      const ewSelect = document.getElementById('ew-select');
+      const walletCode = ewSelect.value;
+      const ewName = ewSelect.options[ewSelect.selectedIndex].textContent;
+      const number = document.getElementById('ew-number').value.trim();
+      
+      if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
+      
+      setLoading('btn-ew', true, 'e-wallet');
+      const resultEl = document.getElementById('result-ew');
+      
+      try {
+        const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+          body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
+        });
+        const json = await res.json();
+        
+        if (json.status === 'success') {
+          const nama = json.data?.customer_name || 'Tidak terdeteksi';
+          resultEl.className = 'result show success';
+          resultEl.innerHTML = `
+            <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+            <div class="result-body">
+              <div class="info-group">
+                <div class="label">Jenis Akun</div>
+                <div class="value accent">${ewName}</div>
+              </div>
+              <div class="info-group">
+                <div class="label">Nomor HP</div>
+                <div class="value">${number}</div>
+              </div>
+              <div class="info-group">
+                <div class="label">Nama Pemilik</div>
+                <div class="value name">${nama}</div>
+              </div>
+              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+            </div>`;
+        } else {
+          resultEl.className = 'result show error';
+          resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
+        }
+      } catch (e) {
+        resultEl.className = 'result show error';
+        resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+      } finally {
+        setLoading('btn-ew', false);
+      }
     }
-  } catch (e) {
-    resultEl.className = 'result show error';
-    resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
-  } finally {
-    setLoading('btn-ew', false);
-  }
-}
 
     // INIT
     initTelegram();
