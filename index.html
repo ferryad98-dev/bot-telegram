@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>CEK REKENING MP1</title>
+  <title>CEK REKENING</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -13,7 +13,7 @@
       --surface: #141720;
       --surface2: #1c2030;
       --border: #252a3a;
-      --accent: #00ff88;
+      --accent: #ff0066;           /* 🔥 MERAH NEON BARU */
       --text: #e8ecf4;
       --muted: #6b7592;
       --mono: 'DM Mono', monospace;
@@ -24,15 +24,15 @@
       --surface: #ffffff;
       --surface2: #f1f3f8;
       --border: #d1d5e0;
-      --accent: #00cc77;
+      --accent: #cc0033;
       --text: #1a1f2e;
       --muted: #64748b;
     }
 
     body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
 
-    /* MATRIX RAIN */
-    #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.75; }
+    /* MATRIX RAIN - DIUBAH JADI MERAH */
+    #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.85; }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
     .header { text-align: center; margin-bottom: 1.5rem; position: relative; }
@@ -63,7 +63,7 @@
     .logos-container img {
       height: 42px;
       margin: 0 18px;
-      filter: brightness(1.1) drop-shadow(0 0 8px #00ff88);
+      filter: brightness(1.1) drop-shadow(0 0 8px var(--accent));
       opacity: 0.9;
     }
     @keyframes marquee {
@@ -71,7 +71,7 @@
       to { transform: translateX(-50%); }
     }
 
-    .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,255,136,0.15); border: 1px solid rgba(0,255,136,0.6); border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700; color: var(--accent); animation: badgeFlicker 2s infinite alternate; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,0,102,0.15); border: 1px solid rgba(255,0,102,0.6); border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700; color: var(--accent); animation: badgeFlicker 2s infinite alternate; }
     @keyframes badgeFlicker { 0% { text-shadow: 0 0 8px var(--accent); } 100% { text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); } }
 
     .header h1 { font-size: 1.85rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; animation: titleNeon 3s ease-in-out infinite alternate; }
@@ -102,18 +102,18 @@
     }
     .btn:hover { box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent); transform: scale(1.03); }
 
-    .spinner { width: 26px; height: 26px; border: 4px solid rgba(0,255,136,0.25); border-top-color: #00ff88; border-radius: 50%; animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate; box-shadow: 0 0 20px #00ff88, 0 0 35px #00ff88, 0 0 50px #00ff88; }
+    .spinner { width: 26px; height: 26px; border: 4px solid rgba(255,0,102,0.25); border-top-color: #ff0066; border-radius: 50%; animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate; box-shadow: 0 0 20px #ff0066, 0 0 35px #ff0066, 0 0 50px #ff0066; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes neonLoadingPulse { 0% { box-shadow: 0 0 15px #00ff88, 0 0 25px #00ff88; } 100% { box-shadow: 0 0 35px #00ff88, 0 0 55px #00ff88, 0 0 70px #00ff88; } }
+    @keyframes neonLoadingPulse { 0% { box-shadow: 0 0 15px #ff0066, 0 0 25px #ff0066; } 100% { box-shadow: 0 0 35px #ff0066, 0 0 55px #ff0066, 0 0 70px #ff0066; } }
 
     .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
     .result.show { display: block; animation: resultGlow 2s ease-in-out infinite alternate; }
-    .result.success { background: rgba(0,255,136,0.12); border: 1px solid rgba(0,255,136,0.6); }
+    .result.success { background: rgba(255,0,102,0.12); border: 1px solid rgba(255,0,102,0.6); }
     .result-header { padding: 14px 18px; font-weight: 700; font-size: 0.85rem; border-radius: 16px 16px 0 0; text-shadow: 0 0 12px var(--accent); }
-    .result.success .result-header { background: rgba(0,255,136,0.25); color: #000; }
+    .result.success .result-header { background: rgba(255,0,102,0.25); color: #000; }
     .result-body { padding: 1.4rem 1.6rem; }
 
-    /* === RESULT RAPI & KONSISTEN (baru) === */
+    /* === RESULT RAPI & KONSISTEN === */
     .result-body {
       display: flex;
       flex-direction: column;
@@ -139,12 +139,12 @@
       letter-spacing: 0.5px;
     }
     .result-body .value.accent {
-      color: #00ff88;
+      color: var(--accent);
     }
     .result-body .value.name {
       font-size: 1.72rem;
-      color: #00ff88;
-      text-shadow: 0 0 18px #00ff88;
+      color: var(--accent);
+      text-shadow: 0 0 18px var(--accent);
     }
 
     .copy-btn { margin-top: 12px; width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
@@ -224,7 +224,7 @@
   <script>
     const API_KEY = "503c53df-222b-41f5-abb0-70563a22828a";
 
-    // ==================== MATRIX RAIN ====================
+    // ==================== MATRIX RAIN (MERAH NEON) ====================
     const canvas = document.getElementById('matrix-canvas');
     const ctx = canvas.getContext('2d');
     let fontSize = 13;
@@ -242,9 +242,9 @@
 
     const chars = "01アイウエオ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*";
     function drawMatrix() {
-      ctx.fillStyle = 'rgba(10, 12, 16, 0.12)';
+      ctx.fillStyle = 'rgba(10, 12, 16, 0.14)';           // sedikit lebih gelap biar merah makin keluar
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#00ff88';
+      ctx.fillStyle = '#ff0066';                          // 🔥 MERAH NEON
       ctx.font = `${fontSize}px monospace`;
       for (let i = 0; i < drops.length; i++) {
         const text = chars[Math.floor(Math.random() * chars.length)];
