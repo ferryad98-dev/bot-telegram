@@ -20,31 +20,33 @@
       --sans: 'Sora', sans-serif;
     }
 
-    body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 1rem; position: relative; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; padding: 0.8rem; position: relative; overflow-x: hidden; }
 
     /* MATRIX RAIN */
     #matrix-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.85; }
 
     .wrapper { width: 100%; max-width: 420px; margin: 0 auto; z-index: 2; position: relative; }
-    .header { text-align: center; margin-bottom: 1.5rem; position: relative; }
 
-    /* TOMBOL WARNA KHUSUS */
+    .header { text-align: center; margin-bottom: 1rem; position: relative; }
+
+    /* TOMBOL WARNA KHUSUS (lebih kecil & rapi) */
     .color-btn {
       position: absolute;
-      top: 8px;
-      left: 8px;
+      top: 4px;
+      left: 4px;
       background: var(--surface2);
       border: 1px solid var(--border);
       color: var(--text);
-      font-size: 1.4rem;
-      padding: 10px 14px;
-      border-radius: 12px;
+      font-size: 1.1rem;
+      padding: 8px 12px;
+      border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
-      box-shadow: 0 0 15px rgba(255,0,102,0.3);
-      transition: all 0.3s;
+      gap: 6px;
+      box-shadow: 0 0 12px rgba(255,0,102,0.3);
+      transition: all 0.25s;
+      z-index: 10;
     }
     .color-btn:hover {
       background: var(--accent);
@@ -56,7 +58,7 @@
     #color-modal {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.9);
       z-index: 9999;
       display: none;
       align-items: center;
@@ -65,67 +67,66 @@
     .modal-content {
       background: var(--surface);
       border: 1px solid var(--accent);
-      border-radius: 20px;
-      width: 92%;
-      max-width: 360px;
-      padding: 24px;
-      box-shadow: 0 0 40px var(--accent);
+      border-radius: 18px;
+      width: 90%;
+      max-width: 340px;
+      padding: 20px;
+      box-shadow: 0 0 30px var(--accent);
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      font-size: 1.3rem;
+      margin-bottom: 18px;
+      font-size: 1.25rem;
       font-weight: 700;
     }
     .modal-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 14px;
+      gap: 12px;
     }
     .color-option {
       display: flex;
       flex-direction: column;
       align-items: center;
       cursor: pointer;
-      transition: all 0.2s;
     }
-    .color-option:hover { transform: scale(1.12); }
+    .color-option:hover { transform: scale(1.1); }
     .color-swatch {
-      width: 52px;
-      height: 52px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
-      border: 4px solid #111;
-      box-shadow: 0 0 15px var(--accent);
+      border: 3px solid #111;
+      box-shadow: 0 0 12px var(--accent);
     }
     .color-name {
-      margin-top: 6px;
-      font-size: 0.8rem;
+      margin-top: 4px;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
     }
 
-    /* RUNNING LOGOS */
+    /* RUNNING LOGOS (lebih compact) */
     .running-logos {
-      margin: 20px 0 25px 0;
+      margin: 12px 0 18px 0;
       overflow: hidden;
       white-space: nowrap;
       position: relative;
     }
     .running-logos::before, .running-logos::after {
-      content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2; pointer-events: none;
+      content: ''; position: absolute; top: 0; bottom: 0; width: 30px; z-index: 2; pointer-events: none;
     }
     .running-logos::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
     .running-logos::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
 
     .logos-container {
       display: inline-flex;
-      animation: marquee 28s linear infinite;
+      animation: marquee 25s linear infinite;
     }
     .logos-container img {
-      height: 42px;
-      margin: 0 18px;
+      height: 36px;
+      margin: 0 12px;
       filter: brightness(1.1) drop-shadow(0 0 8px var(--accent));
       opacity: 0.9;
     }
@@ -134,84 +135,80 @@
       to { transform: translateX(-50%); }
     }
 
-    .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,0,102,0.15); border: 1px solid rgba(255,0,102,0.6); border-radius: 9999px; padding: 4px 16px; font-size: 0.75rem; font-weight: 700; color: var(--accent); animation: badgeFlicker 2s infinite alternate; }
-    @keyframes badgeFlicker { 0% { text-shadow: 0 0 8px var(--accent); } 100% { text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); } }
+    .badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,0,102,0.15); border: 1px solid rgba(255,0,102,0.6); border-radius: 9999px; padding: 3px 14px; font-size: 0.72rem; font-weight: 700; color: var(--accent); animation: badgeFlicker 2s infinite alternate; }
 
-    .header h1 { font-size: 1.85rem; font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; animation: titleNeon 3s ease-in-out infinite alternate; }
+    .header h1 { font-size: 1.65rem; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; animation: titleNeon 3s ease-in-out infinite alternate; }
     @keyframes titleNeon { 0% { text-shadow: 0 0 10px var(--accent); } 100% { text-shadow: 0 0 30px var(--accent), 0 0 50px var(--accent); } }
 
-    .tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface2); border-radius: 14px; padding: 5px; border: 1px solid var(--border); margin-bottom: 1.6rem; }
-    .tab-btn { padding: 14px 16px; border: none; background: transparent; color: var(--muted); font-weight: 600; font-size: 0.95rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s; }
-    .tab-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 25px var(--accent); animation: tabPulse 2s ease-in-out infinite alternate; }
-    @keyframes tabPulse { 0% { box-shadow: 0 0 15px var(--accent); } 100% { box-shadow: 0 0 35px var(--accent), 0 0 50px var(--accent); } }
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface2); border-radius: 12px; padding: 4px; border: 1px solid var(--border); margin-bottom: 1.2rem; }
+    .tab-btn { padding: 12px 14px; border: none; background: transparent; color: var(--muted); font-weight: 600; font-size: 0.95rem; border-radius: 9px; cursor: pointer; transition: all 0.25s; }
+    .tab-btn.active { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
 
     .panel { display: none; }
     .panel.active { display: block; }
 
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 1.8rem; }
-    .field { margin-bottom: 1.4rem; }
-    label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted); margin-bottom: 0.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.3rem; }
+
+    .field { margin-bottom: 1.1rem; }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; }
     select, input { 
       width: 100%; background: var(--surface2); border: 1px solid var(--border); 
-      border-radius: 12px; padding: 14px 16px; color: var(--text); 
+      border-radius: 10px; padding: 12px 14px; color: var(--text); 
       font-family: var(--mono); font-size: 1rem; outline: none; 
     }
 
     .btn {
-      width: 100%; padding: 15px; background: var(--accent); color: #000;
-      border: none; border-radius: 12px; font-weight: 600; font-size: 1rem;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      cursor: pointer; box-shadow: 0 0 20px var(--accent); transition: all 0.3s;
+      width: 100%; padding: 13px; background: var(--accent); color: #000;
+      border: none; border-radius: 10px; font-weight: 600; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      cursor: pointer; box-shadow: 0 0 18px var(--accent); transition: all 0.3s;
     }
-    .btn:hover { box-shadow: 0 0 40px var(--accent), 0 0 60px var(--accent); transform: scale(1.03); }
+    .btn:hover { box-shadow: 0 0 35px var(--accent); transform: scale(1.03); }
 
-    .spinner { width: 26px; height: 26px; border: 4px solid rgba(255,0,102,0.25); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate; box-shadow: 0 0 20px var(--accent), 0 0 35px var(--accent), 0 0 50px var(--accent); }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes neonLoadingPulse { 0% { box-shadow: 0 0 15px var(--accent), 0 0 25px var(--accent); } 100% { box-shadow: 0 0 35px var(--accent), 0 0 55px var(--accent), 0 0 70px var(--accent); } }
+    .spinner { width: 24px; height: 24px; border: 4px solid rgba(255,0,102,0.25); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite, neonLoadingPulse 1.4s ease-in-out infinite alternate; box-shadow: 0 0 18px var(--accent); }
 
-    .result { margin-top: 1.5rem; border-radius: 16px; display: none; }
+    .result { margin-top: 1.1rem; border-radius: 14px; display: none; }
     .result.show { display: block; animation: resultGlow 2s ease-in-out infinite alternate; }
     .result.success { background: rgba(255,0,102,0.12); border: 1px solid rgba(255,0,102,0.6); }
-    .result-header { padding: 14px 18px; font-weight: 700; font-size: 0.85rem; border-radius: 16px 16px 0 0; text-shadow: 0 0 12px var(--accent); }
+    .result-header { padding: 12px 16px; font-weight: 700; font-size: 0.82rem; border-radius: 14px 14px 0 0; text-shadow: 0 0 10px var(--accent); }
     .result.success .result-header { background: rgba(255,0,102,0.25); color: #000; }
-    .result-body { padding: 1.4rem 1.6rem; }
+    .result-body { padding: 1.1rem 1.3rem; }
 
     /* RESULT RAPI */
     .result-body {
       display: flex;
       flex-direction: column;
-      gap: 1.4rem;
+      gap: 1.1rem;
     }
     .result-body .info-group {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
     .result-body .label {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--muted);
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
     }
     .result-body .value {
       font-family: var(--mono);
-      font-size: 1.35rem;
+      font-size: 1.28rem;
       font-weight: 700;
       color: var(--text);
-      letter-spacing: 0.5px;
     }
     .result-body .value.accent {
       color: var(--accent);
     }
     .result-body .value.name {
-      font-size: 1.72rem;
+      font-size: 1.65rem;
       color: var(--accent);
-      text-shadow: 0 0 18px var(--accent);
+      text-shadow: 0 0 16px var(--accent);
     }
 
-    .copy-btn { margin-top: 12px; width: 100%; padding: 13px; background: #111; color: #fff; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; }
-    .footer-note { text-align: center; margin-top: 2rem; font-size: 0.78rem; color: var(--muted); }
+    .copy-btn { margin-top: 10px; width: 100%; padding: 12px; background: #111; color: #fff; border: none; border-radius: 9px; font-weight: 600; cursor: pointer; }
+    .footer-note { text-align: center; margin-top: 1.4rem; font-size: 0.75rem; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -219,9 +216,9 @@
 
   <div class="wrapper">
     <div class="header">
-      <!-- TOMBOL KHUSUS PILIH WARNA -->
+      <!-- TOMBOL WARNA KHUSUS (lebih kecil) -->
       <button onclick="toggleColorModal()" class="color-btn">
-        🎨 <span style="font-size:0.95rem; font-weight:600;">Pilih Warna</span>
+        🎨 <span style="font-size:0.9rem;">Pilih Warna</span>
       </button>
 
       <div class="badge">● SECURITY VERIFIED ●</div>
@@ -292,7 +289,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <span>🎨 Pilih Warna Neon</span>
-        <span onclick="toggleColorModal()" style="font-size:1.8rem; cursor:pointer; color:var(--muted);">✕</span>
+        <span onclick="toggleColorModal()" style="font-size:1.6rem; cursor:pointer; color:var(--muted);">✕</span>
       </div>
       <div class="modal-grid" id="modal-grid"></div>
     </div>
@@ -373,11 +370,7 @@
 
     function toggleColorModal() {
       const modal = document.getElementById('color-modal');
-      if (modal.style.display === 'flex') {
-        modal.style.display = 'none';
-      } else {
-        modal.style.display = 'flex';
-      }
+      modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
     }
 
     function setAccent(hex) {
@@ -441,9 +434,8 @@
       const btn = document.getElementById(btnId);
       const text = document.getElementById(btnId + '-text');
       btn.disabled = loading;
-      btn.classList.toggle('loading', loading);
       if (loading) {
-        text.innerHTML = `<span class="spinner"></span> Sedang mengecek ${type}...`;
+        text.innerHTML = `<span class="spinner"></span> Sedang mengecek...`;
       } else {
         text.innerHTML = type === 'bank' ? 'Cek Rekening' : 'Cek E-Wallet';
       }
@@ -457,7 +449,7 @@
       
       if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
       
-      setLoading('btn-bank', true, 'rekening');
+      setLoading('btn-bank', true, 'bank');
       const resultEl = document.getElementById('result-bank');
       
       try {
@@ -508,7 +500,7 @@
       
       if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
       
-      setLoading('btn-ew', true, 'e-wallet');
+      setLoading('btn-ew', true, 'ewallet');
       const resultEl = document.getElementById('result-ew');
       
       try {
@@ -551,7 +543,6 @@
       }
     }
 
-    // LOAD SAVED COLOR
     function loadAccent() {
       const saved = localStorage.getItem('accentColor');
       if (saved) {
