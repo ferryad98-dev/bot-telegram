@@ -305,77 +305,89 @@ const logos = [
       }
     }
 
-    async function checkBank() {
-      const bankCode = document.getElementById('bank-select').value;
-      const number = document.getElementById('bank-number').value.trim();
-      if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
-      setLoading('btn-bank', true, 'rekening');
-      const resultEl = document.getElementById('result-bank');
-      try {
-        const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
-        });
-        const json = await res.json();
-        if (json.status === 'success') {
-          const nama = json.data?.customer_name || 'Tidak terdeteksi';
-          resultEl.className = 'result show success';
-          resultEl.innerHTML = `
-            <div class="result-header">✅ VERIFIKASI BERHASIL</div>
-            <div class="result-body">
-              <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">Bank</span></div>
-              <div style="margin:12px 0"><strong>Nomor Rekening</strong><br><span style="font-family:monospace">${number}</span></div>
-              <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
-              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-            </div>`;
-        } else {
-          resultEl.className = 'result show error';
-          resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
-        }
-      } catch (e) {
-        resultEl.className = 'result show error';
-        resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
-      } finally {
-        setLoading('btn-bank', false);
-      }
+async function checkBank() {
+  const bankSelect = document.getElementById('bank-select');
+  const bankCode = bankSelect.value;
+  const bankName = bankSelect.options[bankSelect.selectedIndex].textContent;   // ← ini yang baru
+  const number = document.getElementById('bank-number').value.trim();
+  
+  if (!bankCode || !number) return alert('Pilih bank dan masukkan nomor rekening!');
+  
+  setLoading('btn-bank', true, 'rekening');
+  const resultEl = document.getElementById('result-bank');
+  
+  try {
+    const res = await fetch('https://rfpdev.xyz/api/check-rekening', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({ api_key: API_KEY, bank_code: bankCode, account_number: number })
+    });
+    const json = await res.json();
+    
+    if (json.status === 'success') {
+      const nama = json.data?.customer_name || 'Tidak terdeteksi';
+      resultEl.className = 'result show success';
+      resultEl.innerHTML = `
+        <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+        <div class="result-body">
+          <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">${bankName}</span></div>
+          <div style="margin:12px 0"><strong>Nomor Rekening</strong><br><span style="font-family:monospace">${number}</span></div>
+          <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
+          <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+        </div>`;
+    } else {
+      resultEl.className = 'result show error';
+      resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
     }
+  } catch (e) {
+    resultEl.className = 'result show error';
+    resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+  } finally {
+    setLoading('btn-bank', false);
+  }
+}
 
-    async function checkEwallet() {
-      const walletCode = document.getElementById('ew-select').value;
-      const number = document.getElementById('ew-number').value.trim();
-      if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
-      setLoading('btn-ew', true, 'e-wallet');
-      const resultEl = document.getElementById('result-ew');
-      try {
-        const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-          body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
-        });
-        const json = await res.json();
-        if (json.status === 'success') {
-          const nama = json.data?.customer_name || 'Tidak terdeteksi';
-          resultEl.className = 'result show success';
-          resultEl.innerHTML = `
-            <div class="result-header">✅ VERIFIKASI BERHASIL</div>
-            <div class="result-body">
-              <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">E-Wallet</span></div>
-              <div style="margin:12px 0"><strong>Nomor HP</strong><br><span style="font-family:monospace">${number}</span></div>
-              <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
-              <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
-            </div>`;
-        } else {
-          resultEl.className = 'result show error';
-          resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
-        }
-      } catch (e) {
-        resultEl.className = 'result show error';
-        resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
-      } finally {
-        setLoading('btn-ew', false);
-      }
+async function checkEwallet() {
+  const ewSelect = document.getElementById('ew-select');
+  const walletCode = ewSelect.value;
+  const ewName = ewSelect.options[ewSelect.selectedIndex].textContent;   // ← ini yang baru
+  const number = document.getElementById('ew-number').value.trim();
+  
+  if (!walletCode || !number) return alert('Pilih e-wallet dan masukkan nomor HP!');
+  
+  setLoading('btn-ew', true, 'e-wallet');
+  const resultEl = document.getElementById('result-ew');
+  
+  try {
+    const res = await fetch('https://rfpdev.xyz/api/check-ewallet', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({ api_key: API_KEY, ewallet_code: walletCode, phone_number: number })
+    });
+    const json = await res.json();
+    
+    if (json.status === 'success') {
+      const nama = json.data?.customer_name || 'Tidak terdeteksi';
+      resultEl.className = 'result show success';
+      resultEl.innerHTML = `
+        <div class="result-header">✅ VERIFIKASI BERHASIL</div>
+        <div class="result-body">
+          <div><strong>Jenis Akun</strong><br><span style="color:#00ff88">${ewName}</span></div>
+          <div style="margin:12px 0"><strong>Nomor HP</strong><br><span style="font-family:monospace">${number}</span></div>
+          <div><strong>Nama Pemilik</strong><br><span class="result-name">${nama}</span></div>
+          <button onclick="navigator.clipboard.writeText('${nama}').then(()=>this.innerHTML='✅ Berhasil disalin!')" class="copy-btn">📋 Salin Nama Pemilik</button>
+        </div>`;
+    } else {
+      resultEl.className = 'result show error';
+      resultEl.innerHTML = `<div class="result-header">❌ GAGAL</div><div class="result-body">${json.message || 'Data tidak ditemukan'}</div>`;
     }
+  } catch (e) {
+    resultEl.className = 'result show error';
+    resultEl.innerHTML = `<div class="result-header">❌ ERROR</div><div class="result-body">Koneksi bermasalah</div>`;
+  } finally {
+    setLoading('btn-ew', false);
+  }
+}
 
     // INIT
     initTelegram();
